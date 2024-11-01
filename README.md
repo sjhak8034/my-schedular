@@ -7,7 +7,7 @@
 
 ### 1. 일정 생성
 * 요청 Request
-* * Headers:
+  * Headers:
 
 ## 2. ERD
 ![image](https://github.com/user-attachments/assets/5ff30f78-9b26-4500-93f4-17d2580ebd2b)
