@@ -18,5 +18,4 @@ DELETE FROM schedulardb.schedules WHERE schedule_id = 1;
 
 
 select title, content from schedulardb.schedules where schedule_id = 1;
-select schedule_id from schedulardb.schedules where posted_date BETWEEN '2024-01-01 00:00:00' AND '2024-11-30 23:59:59';
-select * from schedules
+select schedule_id from schedulardb.schedules where posted_date BETWEEN '2024-01-01 00:00:00' AND '2024-11-30 23:59:59' limit 10;
