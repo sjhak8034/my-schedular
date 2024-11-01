@@ -17,12 +17,17 @@
 * 요청 Request
   * Header: Content-Type: application/json
   * Body:
+ 
+ 
  {
     "title": "work",
     "content": "meeting",
     "password": "0000",
     "user_name": "홍길동"
+
 }
+
+
 |#|변수 설명|변수 이름|타입|Nullable|description|
 |-|--------|---------|---|---|--|
 |1|제목|title|String|o|20글자 제한|
