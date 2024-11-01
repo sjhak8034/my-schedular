@@ -1,41 +1,22 @@
 use schedulardb;
-CREATE TABLE `Calender` (
-                            `date`	DATE	NOT NULL	DEFAULT '2024-01-01',
-                            `month`	int	NOT NULL	DEFAULT 01,
-                            `day`	int	NOT NULL	DEFAULT 01,
-                            `id`	int	NULL	DEFAULT NULL
-);
 
 CREATE TABLE `Schedules` (
-                             `hour`	int	NULL	DEFAULT NULL,
-                             `minute`	int	NULL	DEFAULT NULL,
-                             `title`	varchar(20)	NULL	DEFAULT NULL,
-                             `content`	varchar(100)	NULL	DEFAULT NULL,
-                             `date`	DATE	NOT NULL	DEFAULT '2024-01-01',
-                             `id`	int	NULL	DEFAULT NULL
+                             schedule_id	int	AUTO_INCREMENT PRIMARY KEY,
+                             posted_date	datetime	NOT NULL	DEFAULT '2024-01-01-00-00-00',
+                             title	varchar(20)	NULL	DEFAULT NULL,
+                             content	varchar(100)	NULL	DEFAULT NULL,
+                             password	varchar(20)	NOT NULL	DEFAULT '0000',
+                             user_name	varchar(20)	NULL	DEFAULT NULL
 );
 
-CREATE TABLE `User` (
-                        `id`	int	NULL	DEFAULT NULL,
-                        `userId`	varchar(20)	NOT NULL,
-                        `password`	varchar(20)	NOT NULL,
-                        `name`	varchar(20)	NOT NULL	DEFAULT '홍길동'
-);
 
-ALTER TABLE `Calender` ADD CONSTRAINT `PK_CALENDER` PRIMARY KEY (
-                                                                 `date`
-    );
 
-ALTER TABLE `User` ADD CONSTRAINT `PK_USER` PRIMARY KEY (
-                                                         `id`
-    );
-SHOW TABLES IN schedulardb;
-INSERT INTO schedulardb.calender (`date`, `month`, `day` ,`id` ) VALUES ('2024-01-01',01,01,1);
-INSERT INTO schedulardb.schedules (`hour`, `minute`, title , content, `date`,id ) VALUES (00,00,'work','meeting','2024-01-01',1);
-update schedulardb.calender set `date` = 2024-01-01, `month` = 01, `day`= 01 ,`id` = 1;
-update schedulardb.schedules set `hour` = 00, `minute` = 00, title ='travel', content = 'shopping', `date` = '2024-01-01',id = 1;
-DELETE FROM schedulardb.schedules WHERE `date` = 2024-01-01;
-DELETE FROM schedulardb.calender WHERE `date` = 2024-01-01;
 
-select * from schedulardb.schedules;
-select * from schedulardb.calender;
+INSERT INTO schedulardb.schedules (posted_date, title , content, password, user_name ) VALUES ('2024-01-01-00-00-00','work','meeting','asdf1234','홍길동');
+update schedulardb.schedules set posted_date ='2024-01-03', title = 'travel', content = 'go to restaurant'  where schedule_id = 1;
+DELETE FROM schedulardb.schedules WHERE schedule_id = 1;
+
+
+select title, content from schedulardb.schedules where schedule_id = 1;
+select schedule_id from schedulardb.schedules where posted_date BETWEEN '2024-01-01 00:00:00' AND '2024-11-30 23:59:59';
+select * from schedules
