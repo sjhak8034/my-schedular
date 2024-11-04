@@ -62,6 +62,8 @@
      * endDate (optional) : 조회할 작성일 (끝) (YYYY-MM-DD)
      * userName (optional) : 조회할 작성자명
   * 정렬: 작성일 기준 내림차순
+
+
  
 |#|변수 설명|변수 이름|타입|Nullable|description|
 |-|--------|---------|---|---|--|
@@ -101,6 +103,8 @@
 * GET /api/schedules/{scheduleId}
 * 요청 Request
    * Path Variable: scheduleId
+ 
+ 
 |#|변수 설명|변수 이름|	타입|	Nullable|description|
 |-|-|-|-|-|-|
 |1|게시글 고유 번호|scheduleId|int|o|AUTO-INCREMENT|
@@ -132,6 +136,8 @@
      * Content-Type: application/json
      * Authorization: 비밀번호 (비밀번호를 요청 헤더로 전달)
    * path Variable: scheduleid
+ 
+ 
 |#|변수 설명|변수 이름|	타입|	Nullable|description|
 |-|-|-|-|-|-|
 |1|게시글 고유 번호|scheduleId|int|x|AUTO-INCREMENT|
@@ -173,6 +179,8 @@
    *Header:
      * Authorization: 비밀번호 (비밀번호를 요청 헤더로 전달)
      * Path Variable: scheduleId
+
+
  
 |#|변수 설명|변수 이름|타입|Nullable|description|
 |-|--------|---------|---|---|--|
