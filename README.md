@@ -16,6 +16,13 @@
 * POST /api/schedules
 * 요청 Request
   * Headers: Authorization: 비밀번호 (비밀번호를 요청 헤더로 전달)
+ 
+
+|#|변수 설명|변수 이름|타입|Nullable|description|
+|-|--------|---------|---|---|--|
+|1|비밀번호|password|String|x|20글자 제한|
+
+
   * Body:
  
  
