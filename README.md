@@ -203,7 +203,7 @@
 
 ```
 ## 2. ERD
-![image](https://github.com/user-attachments/assets/5ff30f78-9b26-4500-93f4-17d2580ebd2b)
+![image](https://github.com/user-attachments/assets/0b597ad7-22c1-437c-a93a-c4e9ee08d404)
 ## 3. Query 목록
 * 테이블 생성
 ```
