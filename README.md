@@ -8,7 +8,7 @@
 |기능|	method|	url	|request	|response	|status|
 |-------------|----|---------------|-----------|---------|--------------|
 |일정 생성|POST|	/api/schedules|	요청 body	|등록 정보	|201: 정상 등록|
-|특정기간 일정 목록 조회|	GET	|/api/schedules?start-date="시작날짜"&end-date="마지막 날짜"|	요청 param	|다건 응답 정보	|200: 정상 조회|
+|특정기간 일정 목록 조회|	GET	|/api/schedules|	요청 param	|다건 응답 정보	|200: 정상 조회|
 |특정 일정 조회|	GET	|/api/schedules/{scheduleId}|	요청 param|	단건 응답 정보|	200: 정상 조회|
 |일정 수정|	PUT|	/api/schedules/{scheduleId}|	요청 body	|수정 정보	|200: 정상 수정|
 |일정 삭제|	DELETE|	/api/schedules/{scheduleId}|	요청 param	|삭제 정보	|204: 정상 삭제|
@@ -31,9 +31,10 @@
 
 |#|변수 설명|변수 이름|타입|Nullable|description|
 |-|--------|---------|---|---|--|
-|1|제목|title|String|o|20글자 제한|
-|2|할일|content|String|o|100글자 제한|
-|3|작성자명|userName|String|o|20글자 제한|
+|1|제목|title|String|x|20글자 제한|
+|2|할일|content|String|x|100글자 제한|
+|3|작성자명|userName|String|x|20글자 제한|
+|4|비밀번호|password|String|x|20글자 제한|
 
 
 * 응답 Response
@@ -43,7 +44,7 @@
 
 ```
 {
-    "responseMessage" : "일정 등록 성공하였습니다."
+    "responseMessage" : "scheduleId: {scheduleId} created"
 }
 ```
 
@@ -54,7 +55,7 @@
 
 
 ### 특정기간 일정 목록 조회
-* GET /api/schedules
+* GET /api/schedules?start-date="시작날짜"&end-date="마지막 날짜"
 * 요청 Request
   * parameters:
      * startDate (optional) : 조회할 작성일 (시작) (YYYY-MM-DD)
@@ -64,9 +65,9 @@
  
 |#|변수 설명|변수 이름|타입|Nullable|description|
 |-|--------|---------|---|---|--|
-|1|시작 일|startDate|String|o|YYYY-MM-DD|
-|2|마지막 일|endDate|String|o|YYYY-MM-DD|
-|3|작성자명|userName|String|o|20글자 제한|
+|1|시작 일|startDate|String|x|YYYY-MM-DD|
+|2|마지막 일|endDate|String|x|YYYY-MM-DD|
+|3|작성자명|userName|String|x|20글자 제한|
 
 
 * 응답
@@ -88,11 +89,11 @@
 ```
 |#|변수 설명|변수 이름|타입|Nullable|description|
 |-|--------|---------|---|---|--|
-|1|게시글 고유 번호|scheduleId|int|o||
-|2|할일 내용|content|String|o||
-|3|작성자명|userName|String|o|20글자 제한|
-|4|postedDate|postedDate|String|o|YYYY-MM-DD HH:mm:ss|
-|5|editedDate|editedDate|String|o|YYYY-MM-DD HH:mm:ss|
+|1|게시글 고유 번호|scheduleId|int|x|AUTO-INCREMENT|
+|2|할일 내용|content|String|x|100글자 제한|
+|3|작성자명|userName|String|x|20글자 제한|
+|4|postedDate|postedDate|String|x|YYYY-MM-DD HH:mm:ss|
+|5|editedDate|editedDate|String|x|YYYY-MM-DD HH:mm:ss|
 
 
 
@@ -100,6 +101,9 @@
 * GET /api/schedules/{scheduleId}
 * 요청 Request
    * Path Variable: scheduleId
+|#|변수 설명|변수 이름|	타입|	Nullable|description|
+|-|-|-|-|-|-|
+|1|게시글 고유 번호|scheduleId|int|o|AUTO-INCREMENT|
 * 응답
    * Status Code: 200 OK
    * Body:
@@ -115,11 +119,11 @@
 
 |#|변수 설명|변수 이름|	타입|	Nullable|description|
 |-|-|-|-|-|-|
-|1|게시글 고유 번호|scheduleId|int|o||
-|2|할일 내용|content|String|o||
-|3|작성자명|userName|String|o|20글자 제한|
-|4|작성일|postedDate|String|o|YYYY-MM-DD HH:mm:ss|
-|5|수정일|editedDate|String|o|YYYY-MM-DD HH:mm:ss|
+|1|게시글 고유 번호|scheduleId|int|o|AUTO-INCREMENT|
+|2|할일 내용|content|String|x|100글자 제한|
+|3|작성자명|userName|String|x|20글자 제한|
+|4|작성일|postedDate|String|x|YYYY-MM-DD HH:mm:ss|
+|5|수정일|editedDate|String|x|YYYY-MM-DD HH:mm:ss|
 
 ### 일정 수정
 * PUT /api/schedules/{scheduleId}
@@ -128,6 +132,10 @@
      * Content-Type: application/json
      * Authorization: 비밀번호 (비밀번호를 요청 헤더로 전달)
    * path Variable: scheduleid
+|#|변수 설명|변수 이름|	타입|	Nullable|description|
+|-|-|-|-|-|-|
+|1|게시글 고유 번호|scheduleId|int|x|AUTO-INCREMENT|
+|2|비밀번호|password|String|x|20글자 제한|
    * Body:
  ```
 {
@@ -153,11 +161,11 @@
 
 |#|변수 설명|변수 이름|	타입|	Nullable|description|
 |-|-|-|-|-|-|
-|1|게시글 고유 번호|scheduleId|int|o|YYYY-MM-DD|
-|2|할일 내용|content|String|o|YYYY-MM-DD|
-|3|작성자명|userName|String|o|20글자 제한|
-|4|작성일|postedDate|String|o|YYYY-MM-DD HH:mm:ss|
-|5|수정일|editedDate|String|o|YYYY-MM-DD HH:mm:ss|
+|1|게시글 고유 번호|scheduleId|int|x|AUTO-INCREMENT|
+|2|할일 내용|content|String|x|100글자 제한|
+|3|작성자명|userName|String|x|20글자 제한|
+|4|작성일|postedDate|String|x|YYYY-MM-DD HH:mm:ss|
+|5|수정일|editedDate|String|x|YYYY-MM-DD HH:mm:ss|
 
 ### 일정 삭제
 * DELETE /api/schedules/{scheduleId}
