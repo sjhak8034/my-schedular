@@ -13,7 +13,7 @@
 |일정 수정|	PUT|	/api/schedules/{scheduleId}|	요청 body	|수정 정보	|200: 정상 수정|
 |일정 삭제|	DELETE|	/api/schedules/{scheduleId}|	요청 param	|삭제 정보	|204: 정상 삭제|
 ### 일정 생성 
-* POST/api/schedules
+* POST /api/schedules
 * 요청 Request
   * Headers: Authorization: 비밀번호 (비밀번호를 요청 헤더로 전달)
   * Body:
@@ -37,7 +37,7 @@
 
 
 * 응답 Response
-  * Status Code: 201 Created
+  * Status Code: 200 Created
 
   * Body:
 
@@ -54,7 +54,7 @@
 
 
 ### 특정기간 일정 목록 조회
-* GET/api/schedules
+* GET /api/schedules
 * 요청 Request
   * parameters:
      * startDate (optional) : 조회할 작성일 (시작) (YYYY-MM-DD)
@@ -88,8 +88,8 @@
 ```
 |#|변수 설명|변수 이름|타입|Nullable|description|
 |-|--------|---------|---|---|--|
-|1|게시글 고유 번호|scheduleId|int|o|YYYY-MM-DD|
-|2|할일 내용|content|String|o|YYYY-MM-DD|
+|1|게시글 고유 번호|scheduleId|int|o||
+|2|할일 내용|content|String|o||
 |3|작성자명|userName|String|o|20글자 제한|
 |4|postedDate|postedDate|String|o|YYYY-MM-DD HH:mm:ss|
 |5|editedDate|editedDate|String|o|YYYY-MM-DD HH:mm:ss|
@@ -115,17 +115,18 @@
 
 |#|변수 설명|변수 이름|	타입|	Nullable|description|
 |-|-|-|-|-|-|
-|1|게시글 고유 번호|scheduleId|int|o|YYYY-MM-DD|
-|2|할일 내용|content|String|o|YYYY-MM-DD|
+|1|게시글 고유 번호|scheduleId|int|o||
+|2|할일 내용|content|String|o||
 |3|작성자명|userName|String|o|20글자 제한|
 |4|작성일|postedDate|String|o|YYYY-MM-DD HH:mm:ss|
 |5|수정일|editedDate|String|o|YYYY-MM-DD HH:mm:ss|
 
 ### 일정 수정
-* PUT/api/schedules/{scheduleId}
+* PUT /api/schedules/{scheduleId}
 * 요청
    * Header:
      * Content-Type: application/json
+     * Authorization: 비밀번호 (비밀번호를 요청 헤더로 전달)
    * path Variable: scheduleid
    * Body:
  ```
@@ -185,11 +186,11 @@
 ```
 CREATE TABLE `Schedules` (
                              schedule_id	int	AUTO_INCREMENT PRIMARY KEY,
-                             posted_date	datetime	NOT NULL	DEFAULT '2024-01-01-00-00-00',
-                             title	varchar(20)	NULL	DEFAULT NULL,
-                             content	varchar(100)	NULL	DEFAULT NULL,
-                             password	varchar(20)	NOT NULL	DEFAULT '0000',
-                             user_name	varchar(20)	NULL	DEFAULT NULL
+                             posted_date	datetime	NOT NULL	,
+                             title	varchar(20)	NOT NULL	,
+                             content	varchar(100)	NOT NULL	,
+                             password	varchar(20)	NOT NULL	,
+                             user_name	varchar(20)	NOT NULL	
 );
 ```
 * 일정 생성
@@ -211,6 +212,6 @@ select title, content from schedulardb.schedules where schedule_id = 1;
 ```
 * 특정 기간 일정 조회
 ```
-select schedule_id from schedulardb.schedules where posted_date BETWEEN '2024-01-01 00:00:00' AND '2024-11-30 23:59:59' limit 10;
+select schedule_id from schedulardb.schedules where posted_date BETWEEN '2024-01-01 00:00:00' AND '2024-11-30 23:59:59';
 
 ```
