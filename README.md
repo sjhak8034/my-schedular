@@ -15,14 +15,8 @@
 ### 일정 생성 
 * POST /api/schedules
 * 요청 Request
-  * Headers: Authorization: 비밀번호 (비밀번호를 요청 헤더로 전달)
- 
-
-|#|변수 설명|변수 이름|타입|Nullable|description|
-|-|--------|---------|---|---|--|
-|1|비밀번호|password|String|x|20글자 제한|
-
-
+  * Header:
+     * Content-Type: application/json
   * Body:
  
  
@@ -30,8 +24,8 @@
 {
     "title": "work",
     "content": "meeting",
-    "userName": "홍길동"
-
+    "userName": "홍길동",
+    "password": "1234"
 }
 ```
 
@@ -141,7 +135,7 @@
 * 요청
    * Header:
      * Content-Type: application/json
-     * Authorization: 비밀번호 (비밀번호를 요청 헤더로 전달)
+ 
    * path Variable: scheduleid
  
  
@@ -154,10 +148,18 @@
 {
     "content": "수정된 내용",
     "title" : "수정된 제목",
-    "userName": "수정된 작성자명"
+    "userName": "수정된 작성자명",
+    "password": "1234"
 }
 
 ```
+|#|변수 설명|변수 이름|	타입|	Nullable|description|
+|-|-|-|-|-|-|
+|1|제목|title|String|x|20글자 제한|
+|2|할일 내용|content|String|x|100글자 제한|
+|3|작성자명|userName|String|x|20글자 제한|
+
+
 
 * 응답
   * Status Code: 200 OK
