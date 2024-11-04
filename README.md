@@ -137,7 +137,7 @@
      * Content-Type: application/json
  
    * path Variable: scheduleid
- 
+   * Path Variable: password 
  
 |#|변수 설명|변수 이름|	타입|	Nullable|description|
 |-|-|-|-|-|-|
@@ -186,15 +186,14 @@
 * DELETE /api/schedules/{scheduleId}
 * 요청
    *Header:
-     * Authorization: 비밀번호 (비밀번호를 요청 헤더로 전달)
      * Path Variable: scheduleId
-
+     * Path Variable: password
 
  
 |#|변수 설명|변수 이름|타입|Nullable|description|
 |-|--------|---------|---|---|--|
 |1|게시글 고유 번호|scheduleId|int|x|AUTO_INCREMENT|
-
+|2|비밀번호|password|String|x|20글자 제한|
 * 응답
    * Status Code: 200 OK
    * Body:
