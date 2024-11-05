@@ -115,6 +115,7 @@
 ```
 {
     "scheduleId": "게시글 고유 번호",
+    "title": "제목",
     "content": "할일 내용",
     "userName": "작성자명",
     "postedDate": "YYYY-MM-DD HH:mm:ss",
