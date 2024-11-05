@@ -20,7 +20,10 @@ repositories {
 
 dependencies {
     providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'
-
+    // MySQL
+    implementation 'mysql:mysql-connector-java:8.0.28'
+// JDBC Template
+    implementation 'org.springframework.boot:spring-boot-starter-data-jdbc'
     implementation 'org.apache.tomcat.embed:tomcat-embed-jasper'
     implementation 'jakarta.servlet:jakarta.servlet-api'
     implementation 'jakarta.servlet.jsp.jstl:jakarta.servlet.jsp.jstl-api'

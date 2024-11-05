@@ -1,36 +1,30 @@
 package com.example.jhschedular.AppConfig;
 
-import com.example.jhschedular.Handler.HandlerForDeleteSchedule;
-import com.example.jhschedular.Handler.HandlerForEditSchedule;
-import com.example.jhschedular.Handler.HandlerForPostSchedule;
-import com.example.jhschedular.Handler.HandlerForViewSchedule;
-import com.example.jhschedular.Handler.HandlerForViewScheduleListByDate;
-import com.example.jhschedular.body.RequestBodies;
+import com.example.jhschedular.dto.request.RequestDto;
+import com.example.jhschedular.repository.ScheduleRepository;
+
+import com.example.jhschedular.service.ScheduleService;
 
 public class AppConfig {
 
-    public RequestBodies.RequestBodyToPost requestBodyToPost(){
-        return new RequestBodies.RequestBodyToPost();
-    }
-    public RequestBodies.RequestBodyToEdit requestBodyToEdit(){
-        return new RequestBodies.RequestBodyToEdit();
+    public RequestDto.RequestToPostDto requestToPost(String title, String content, String userName, String password) {
+        return new RequestDto.RequestToPostDto(title,content,userName,password);
     }
 
+    public RequestDto.RequestToEditDto requestToEdit(Long scheduleId, String title, String content, String userName, String password) {
+        return new RequestDto.RequestToEditDto(title,content,userName,password);
+    }
 
+    public RequestDto.RequestToDeleteDto requestToDelete(Long scheduleId, String password) {
+        return new RequestDto.RequestToDeleteDto(scheduleId,password);
+    }
 
-    public HandlerForPostSchedule handlerForPostSchedule(RequestBodies.RequestBodyToPost requestBodyToPost){
-        return new HandlerForPostSchedule(requestBodyToPost);
+    public RequestDto.RequestToViewDto requestToView(Long scheduleId) {
+        return new RequestDto.RequestToViewDto(scheduleId);
     }
-    public HandlerForEditSchedule handlerForEditSchedule(RequestBodies.RequestBodyToPost requestBodyToPost){
-        return new HandlerForEditSchedule(requestBodyToPost);
+
+    public RequestDto.RequestToSearchDto requestToSearch(String startDate, String endDate, String userName) {
+        return new RequestDto.RequestToSearchDto(startDate,endDate,userName);
     }
-    public HandlerForViewScheduleListByDate handlerForViewScheduleListByDate(RequestBodies.RequestBodyToPost requestBodyToPost){
-        return new HandlerForViewScheduleListByDate(requestBodyToPost);
-    }
-    public HandlerForViewSchedule handlerForViewSchedule(RequestBodies.RequestBodyToPost requestBodyToPost){
-        return new HandlerForViewSchedule(requestBodyToPost);
-    }
-    public  HandlerForDeleteSchedule handlerForDeleteSchedule(RequestBodies.RequestBodyToPost requestBodyToPost){
-        return new HandlerForDeleteSchedule(requestBodyToPost);
-    }
+
 }

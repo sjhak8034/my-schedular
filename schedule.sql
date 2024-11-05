@@ -2,11 +2,11 @@ use schedulardb;
 
 CREATE TABLE `Schedules` (
                              schedule_id	int	AUTO_INCREMENT PRIMARY KEY,
-                             posted_date	datetime	NOT NULL	DEFAULT '2024-01-01-00-00-00',
-                             title	varchar(20)	NULL	DEFAULT NULL,
-                             content	varchar(100)	NULL	DEFAULT NULL,
-                             password	varchar(20)	NOT NULL	DEFAULT '0000',
-                             user_name	varchar(20)	NULL	DEFAULT NULL
+                             posted_date	datetime	NOT NULL	,
+                             title	varchar(20)	NOT NULL	,
+                             content	varchar(100)	NOT NULL	D,
+                             password	varchar(20)	NOT NULL	,
+                             user_name	varchar(20)	NOT NULL
 );
 
 
