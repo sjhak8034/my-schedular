@@ -82,7 +82,7 @@
 [
     {
         "scheduleId": "게시글 고유 번호",
-        "content": "할일 내용",
+        "title": "제목",
         "userName": "작성자명",
         "postedDate": "YYYY-MM-DD HH:mm:ss",
         "editedDate": "YYYY-MM-DD HH:mm:ss"
@@ -93,7 +93,7 @@
 |#|변수 설명|변수 이름|타입|Nullable|description|
 |-|--------|---------|---|---|--|
 |1|게시글 고유 번호|scheduleId|int|x|AUTO-INCREMENT|
-|2|할일 내용|content|String|x|100글자 제한|
+|2|제목|title|String|x|20글자 제한|
 |3|작성자명|userName|String|x|20글자 제한|
 |4|postedDate|postedDate|String|x|YYYY-MM-DD HH:mm:ss|
 |5|editedDate|editedDate|String|x|YYYY-MM-DD HH:mm:ss|
@@ -108,13 +108,14 @@
  
 |#|변수 설명|변수 이름|	타입|	Nullable|description|
 |-|-|-|-|-|-|
-|1|게시글 고유 번호|scheduleId|int|o|AUTO-INCREMENT|
+|1|게시글 고유 번호|scheduleId|int|x|AUTO-INCREMENT|
 * 응답
    * Status Code: 200 OK
    * Body:
 ```
 {
     "scheduleId": "게시글 고유 번호",
+    "title": "제목",
     "content": "할일 내용",
     "userName": "작성자명",
     "postedDate": "YYYY-MM-DD HH:mm:ss",
@@ -124,20 +125,25 @@
 
 |#|변수 설명|변수 이름|	타입|	Nullable|description|
 |-|-|-|-|-|-|
-|1|게시글 고유 번호|scheduleId|int|o|AUTO-INCREMENT|
-|2|할일 내용|content|String|x|100글자 제한|
-|3|작성자명|userName|String|x|20글자 제한|
-|4|작성일|postedDate|String|x|YYYY-MM-DD HH:mm:ss|
-|5|수정일|editedDate|String|x|YYYY-MM-DD HH:mm:ss|
+|1|게시글 고유 번호|scheduleId|int|x|AUTO-INCREMENT|
+|2|제목|title|String|x|20글자 제한|
+|3|할일 내용|content|String|x|100글자 제한|
+|4|작성자명|userName|String|x|20글자 제한|
+|5|작성일|postedDate|String|x|YYYY-MM-DD HH:mm:ss|
+|6|수정일|editedDate|String|x|YYYY-MM-DD HH:mm:ss|
 
 ### 일정 수정
 * PUT /api/schedules/{scheduleId}
 * 요청
    * Header:
      * Content-Type: application/json
- 
-   * path Variable: scheduleid
-   * Path Variable: password 
+     * path Variable: scheduleid
+   * Body:
+```
+{
+   password:"비밀번호"
+}
+```
  
 |#|변수 설명|변수 이름|	타입|	Nullable|description|
 |-|-|-|-|-|-|
@@ -149,7 +155,6 @@
     "content": "수정된 내용",
     "title" : "수정된 제목",
     "userName": "수정된 작성자명",
-    "password": "1234"
 }
 
 ```
@@ -187,8 +192,12 @@
 * 요청
    *Header:
      * Path Variable: scheduleId
-     * Path Variable: password
-
+   *Body:
+```
+{
+    "password": "비밀번호"
+}
+```
  
 |#|변수 설명|변수 이름|타입|Nullable|description|
 |-|--------|---------|---|---|--|
@@ -201,11 +210,14 @@
 {
     "responseMessage": "일정이 삭제되었습니다."
 }
-
 ```
+
+
 ## 2. ERD
 ![image](https://github.com/user-attachments/assets/0b597ad7-22c1-437c-a93a-c4e9ee08d404)
 ## 3. Query 목록
+
+
 * 테이블 생성
 ```
 CREATE TABLE `Schedules` (
