@@ -210,11 +210,14 @@
 {
     "responseMessage": "일정이 삭제되었습니다."
 }
-
 ```
+
+
 ## 2. ERD
 ![image](https://github.com/user-attachments/assets/0b597ad7-22c1-437c-a93a-c4e9ee08d404)
 ## 3. Query 목록
+
+
 * 테이블 생성
 ```
 CREATE TABLE `Schedules` (
