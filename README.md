@@ -208,9 +208,9 @@
    * Status Code: 200 OK
    * Body:
  ```
-{
-    "responseMessage": "일정이 삭제되었습니다."
-}
+
+ responseMessage : scheduleId: 8 updated
+
 ```
 
 
