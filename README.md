@@ -3,6 +3,7 @@
 * [일정 관리 API 명세서](#1-일정-관리-API-명세서)
 * [ERD](#2-ERD)
 * [Query 목록 ](#3-Query-목록)
+* [Postman API 명세서] (#4-PostMan-명세서)
 ## 1. 일정 관리 API 명세서
 ### 요약
 |기능|	method|	url	|request	|response	|status|
@@ -251,3 +252,7 @@ select title, content from schedulardb.schedules where schedule_id = 1;
 select schedule_id from schedulardb.schedules where posted_date BETWEEN '2024-01-01 00:00:00' AND '2024-11-30 23:59:59';
 
 ```
+
+
+#4 Postman API 명세서
+https://web.postman.co/workspace/dc9a47b3-2ced-4fb4-818d-ef16a3835a45/documentation/39355348-3b4eb661-11b8-4878-8829-ce1b5fd04a5a
