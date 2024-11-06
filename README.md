@@ -254,5 +254,5 @@ select schedule_id from schedulardb.schedules where posted_date BETWEEN '2024-01
 ```
 
 
-#4 Postman API 명세서
+## 4. Postman API 명세서
 https://web.postman.co/workspace/dc9a47b3-2ced-4fb4-818d-ef16a3835a45/documentation/39355348-3b4eb661-11b8-4878-8829-ce1b5fd04a5a
