@@ -7,13 +7,13 @@
 ### 요약
 |기능|	method|	url	|request	|response	|status|
 |-------------|----|---------------|-----------|---------|--------------|
-|일정 생성|POST|	/api/schedules|	요청 body	|등록 정보	|201: 정상 등록|
-|특정기간 일정 목록 조회|	GET	|/api/schedules|	요청 param	|다건 응답 정보	|200: 정상 조회|
-|특정 일정 조회|	GET	|/api/schedules/{scheduleId}|	요청 param|	단건 응답 정보|	200: 정상 조회|
-|일정 수정|	PUT|	/api/schedules/{scheduleId}|	요청 body	|수정 정보	|200: 정상 수정|
-|일정 삭제|	DELETE|	/api/schedules/{scheduleId}|	요청 param	|삭제 정보	|204: 정상 삭제|
+|일정 생성|POST|	/schedules|	요청 body	|등록 정보	|200: 정상 등록|
+|특정기간 일정 목록 조회|	GET	|/schedules|	요청 param	|다건 응답 정보	|200: 정상 조회|
+|특정 일정 조회|	GET	|/schedules/{scheduleId}|	요청 param|	단건 응답 정보|	200: 정상 조회|
+|일정 수정|	PUT|	/schedules/{scheduleId}|	요청 body	|수정 정보	|200: 정상 수정|
+|일정 삭제|	DELETE|	/schedules/{scheduleId}|	요청 param	|삭제 정보	|200: 정상 삭제|
 ### 일정 생성 
-* POST /api/schedules
+* POST /schedules
 * 요청 Request
   * Header:
      * Content-Type: application/json
@@ -56,7 +56,7 @@
 
 
 ### 특정기간 일정 목록 조회
-* GET /api/schedules?start-date="시작날짜"&end-date="마지막 날짜"
+* GET /schedules?start-date="시작날짜"&end-date="마지막 날짜"
 * 요청 Request
   * parameters:
      * startDate (optional) : 조회할 작성일 (시작) (YYYY-MM-DD)
@@ -101,7 +101,7 @@
 
 
 ### 특정 일정 조회
-* GET /api/schedules/{scheduleId}
+* GET /schedules/{scheduleId}
 * 요청 Request
    * Path Variable: scheduleId
  
@@ -133,7 +133,7 @@
 |6|수정일|editedDate|String|x|YYYY-MM-DD HH:mm:ss|
 
 ### 일정 수정
-* PUT /api/schedules/{scheduleId}
+* PUT /schedules/{scheduleId}
 * 요청
    * Header:
      * Content-Type: application/json
@@ -188,7 +188,7 @@
 |5|수정일|editedDate|String|x|YYYY-MM-DD HH:mm:ss|
 
 ### 일정 삭제
-* DELETE /api/schedules/{scheduleId}
+* DELETE /schedules/{scheduleId}
 * 요청
    *Header:
      * Path Variable: scheduleId
