@@ -3,6 +3,7 @@ package com.example.jhschedular.service;
 import com.example.jhschedular.dto.request.RequestDto;
 import com.example.jhschedular.dto.response.ResponseDto;
 import com.example.jhschedular.repository.ScheduleRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -11,7 +12,7 @@ import java.util.Optional;
 @Service
 public class ScheduleService {
     private final ScheduleRepository scheduleRepository;
-
+    @Autowired
     public ScheduleService(ScheduleRepository scheduleRepository) {
         this.scheduleRepository = scheduleRepository;
     }
@@ -23,9 +24,7 @@ public class ScheduleService {
         return scheduleRepository.editSchedule(requestDto);
     }
     public List<ResponseDto.ResponseToSearchScheduleListDto> searchToDatabase(RequestDto.RequestToSearchDto requestDto) {
-        if(requestDto.getStartDate() == null || requestDto.getEndDate() == null) {
-            return scheduleRepository.searchAllSchedule();
-        }
+
         return scheduleRepository.searchSchedule(requestDto);
 
     }

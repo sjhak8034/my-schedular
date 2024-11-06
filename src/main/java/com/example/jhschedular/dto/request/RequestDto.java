@@ -1,7 +1,10 @@
 package com.example.jhschedular.dto.request;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -14,8 +17,8 @@ public class RequestDto {
         private String userName;
         private String password;
         private String postDate;
-
-        public RequestToPostDto(String title, String content, String userName, String password) {
+        @JsonCreator
+        public RequestToPostDto(@JsonProperty("title") String title, @JsonProperty("content") String content, @JsonProperty("userName") String userName, @JsonProperty("password") String password) {
             this.title = title;
             this.content = content;
             this.userName = userName;
@@ -27,6 +30,9 @@ public class RequestDto {
 
     }
 
+
+
+
     @Data
 
     public static class RequestToEditDto {
@@ -36,7 +42,9 @@ public class RequestDto {
         private String userName;
         private String password;
         private String editDate;
-        public RequestToEditDto(String title, String content, String userName, String password) {
+        @JsonCreator
+        public RequestToEditDto(@JsonProperty("scheduleId") Long scheduleId,@JsonProperty("title") String title, @JsonProperty("content") String content,  @JsonProperty("userName") String userName, @JsonProperty("password") String password) {
+            this.scheduleId = scheduleId;
             this.title = title;
             this.content = content;
             this.userName = userName;
@@ -49,6 +57,7 @@ public class RequestDto {
 
     @Data
     @AllArgsConstructor
+    @NoArgsConstructor
     public static class RequestToDeleteDto {
         private Long scheduleId;
         private String password;
@@ -56,14 +65,17 @@ public class RequestDto {
 
     @Data
     @AllArgsConstructor
+    @NoArgsConstructor
     public static class RequestToSearchDto {
         private String startDate;
         private String endDate;
         private String userName;
+
     }
 
     @Data
     @AllArgsConstructor
+    @NoArgsConstructor
     public static class RequestToViewDto {
         private Long scheduleId;
     }
