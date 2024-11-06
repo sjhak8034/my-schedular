@@ -3,7 +3,7 @@
 * [일정 관리 API 명세서](#1-일정-관리-API-명세서)
 * [ERD](#2-ERD)
 * [Query 목록 ](#3-Query-목록)
-* [Postman API 명세서](#4-PostMan-명세서)
+* [Postman API 명세서](#4-PostMan-API-명세서)
 ## 1. 일정 관리 API 명세서
 ### 요약
 |기능|	method|	url	|request	|response	|status|
