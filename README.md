@@ -3,6 +3,7 @@
 * [일정 관리 API 명세서](#1-일정-관리-API-명세서)
 * [ERD](#2-ERD)
 * [Query 목록 ](#3-Query-목록)
+* [Postman API 명세서](#4-PostMan-API-명세서)
 ## 1. 일정 관리 API 명세서
 ### 요약
 |기능|	method|	url	|request	|response	|status|
@@ -44,9 +45,9 @@
   * Body:
 
 ```
-{
-    "responseMessage" : "scheduleId: {scheduleId} created"
-}
+
+"responseMessage" : "scheduleId: {scheduleId} updated"
+
 ```
 
 
@@ -169,23 +170,10 @@
 * 응답
   * Status Code: 200 OK
   * Body:
-```
-{
-    "scheduleId": "게시글 고유 번호",
-    "content": "할일 내용",
-    "userName": "작성자명",
-    "postedDate": "YYYY-MM-DD HH:mm:ss",
-    "editedDate": "YYYY-MM-DD HH:mm:ss"
-}
-```
 
-|#|변수 설명|변수 이름|	타입|	Nullable|description|
-|-|-|-|-|-|-|
-|1|게시글 고유 번호|scheduleId|int|x|AUTO-INCREMENT|
-|2|할일 내용|content|String|x|100글자 제한|
-|3|작성자명|userName|String|x|20글자 제한|
-|4|작성일|postedDate|String|x|YYYY-MM-DD HH:mm:ss|
-|5|수정일|editedDate|String|x|YYYY-MM-DD HH:mm:ss|
+responseMessage : scheduleId: 8 updated
+
+
 
 ### 일정 삭제
 * DELETE /schedules/{scheduleId}
@@ -206,11 +194,11 @@
 * 응답
    * Status Code: 200 OK
    * Body:
- ```
-{
-    "responseMessage": "일정이 삭제되었습니다."
-}
-```
+ 
+
+responseMessage : scheduleId: 8 deleted
+
+
 
 
 ## 2. ERD
@@ -251,3 +239,7 @@ select title, content from schedulardb.schedules where schedule_id = 1;
 select schedule_id from schedulardb.schedules where posted_date BETWEEN '2024-01-01 00:00:00' AND '2024-11-30 23:59:59';
 
 ```
+
+
+## 4. Postman API 명세서
+https://web.postman.co/workspace/dc9a47b3-2ced-4fb4-818d-ef16a3835a45/documentation/39355348-3b4eb661-11b8-4878-8829-ce1b5fd04a5a
