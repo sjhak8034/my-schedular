@@ -1,8 +1,20 @@
 package com.example.jhschedular;
 
 
-import com.example.jhschedular.dto.request.RequestDto;
-import com.example.jhschedular.dto.response.ResponseDto;
+import com.example.jhschedular.dto.request.RequestToDeleteDto;
+import com.example.jhschedular.dto.request.RequestToEditDto;
+import com.example.jhschedular.dto.request.RequestToEditUserDto;
+import com.example.jhschedular.dto.request.RequestToPostDto;
+import com.example.jhschedular.dto.request.RequestToRegisterDto;
+import com.example.jhschedular.dto.request.RequestToSearchByDateDto;
+import com.example.jhschedular.dto.request.RequestToViewDto;
+import com.example.jhschedular.dto.response.ResponseToDeleteScheduleDto;
+import com.example.jhschedular.dto.response.ResponseToEditDto;
+import com.example.jhschedular.dto.response.ResponseToEditUserDto;
+import com.example.jhschedular.dto.response.ResponseToPostScheduleDto;
+import com.example.jhschedular.dto.response.ResponseToRegisterUserDto;
+import com.example.jhschedular.dto.response.ResponseToSearchScheduleListDto;
+import com.example.jhschedular.dto.response.ResponseToViewScheduleDto;
 import com.example.jhschedular.service.ScheduleService;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
@@ -32,15 +44,15 @@ public class ScheduleController {
 
     @ResponseBody
     @PostMapping(value = "/schedules")
-    public HttpEntity<String> requestBodyToPost(@RequestBody RequestDto.RequestToPostDto body) throws IOException {
-        ResponseDto.ResponseToPostScheduleDto response = scheduleService.saveToDatabase(body);
+    public HttpEntity<String> requestBodyToPost(@RequestBody RequestToPostDto body) throws IOException {
+        ResponseToPostScheduleDto response = scheduleService.saveToDatabase(body);
         return new ResponseEntity<>(response.getResponseMessage(), HttpStatus.OK);
     }
 
     @ResponseBody
     @PutMapping(value = "/schedules/{scheduleId}")
-    public HttpEntity<String> requestBodyToEdit(@RequestBody RequestDto.RequestToEditDto body, @PathVariable("scheduleId") String scheduleId) throws IOException {
-        ResponseDto.ResponseToEditDto response = scheduleService.editToDatabase(body);
+    public HttpEntity<String> requestBodyToEdit(@RequestBody RequestToEditDto body, @PathVariable("scheduleId") String scheduleId) throws IOException {
+        ResponseToEditDto response = scheduleService.editToDatabase(body);
 
         return new ResponseEntity<>(response.getResponseMessage(), HttpStatus.OK);
 
@@ -48,28 +60,47 @@ public class ScheduleController {
 
     @ResponseBody
     @GetMapping(value = "/schedules")
-    public HttpEntity<List<ResponseDto.ResponseToSearchScheduleListDto>> requestBodyToViewScheduleListByDate(
-            @RequestParam(value = "endDate",defaultValue = "9999-01-01" ) String endDate, @RequestParam(value = "startDate",defaultValue = "1000-01-01") String startDate, @RequestParam(value = "userName",defaultValue = "") String userName) throws IOException {
+    public HttpEntity<List<ResponseToSearchScheduleListDto>> requestBodyToSearchScheduleListByDate(
+            @RequestParam(value = "endDate",defaultValue = "9999-01-01" ) String endDate, @RequestParam(value = "startDate",defaultValue = "1000-01-01") String startDate,
+            @RequestParam(value = "userId",defaultValue = "" ) String userId , @RequestParam(value = "schedulePage") Long schedulePage
+           ) throws IOException {
 
-        List<ResponseDto.ResponseToSearchScheduleListDto> response = scheduleService.searchToDatabase(new RequestDto.RequestToSearchDto(startDate,endDate,userName));
+        List<ResponseToSearchScheduleListDto> response = scheduleService.searchToDatabaseByDate(new RequestToSearchByDateDto(startDate,endDate,userId,schedulePage));
 
         return new ResponseEntity<>(response, HttpStatus.OK);
 
     }
 
+
+
     @ResponseBody
     @GetMapping(value = "/schedules/")
-    public HttpEntity<Optional<ResponseDto.ResponseToViewScheduleDto>> requestBodyToViewSchedule(@RequestParam("scheduleId") Long scheduleId) throws IOException {
+    public HttpEntity<Optional<ResponseToViewScheduleDto>> requestBodyToViewSchedule(@RequestParam("scheduleId") Long scheduleId) throws IOException {
 
-        Optional<ResponseDto.ResponseToViewScheduleDto> response = scheduleService.viewToDatabase(new RequestDto.RequestToViewDto(scheduleId)) ;
+        Optional<ResponseToViewScheduleDto> response = scheduleService.viewToDatabase(new RequestToViewDto(scheduleId)) ;
 
-        return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @ResponseBody
     @DeleteMapping(value = "/schedules/{scheduleId}")
-    public HttpEntity<String> requestBodyToDelete(@PathVariable("scheduleId") Long scheduleId, @RequestBody RequestDto.RequestToDeleteDto body) throws IOException {
-        ResponseDto.ResponseToDeleteScheduleDto response = scheduleService.deleteToDatabase(body);
+    public HttpEntity<String> requestBodyToDelete(@PathVariable("scheduleId") Long scheduleId, @RequestBody RequestToDeleteDto body) throws IOException {
+        ResponseToDeleteScheduleDto response = scheduleService.deleteToDatabase(body);
+        return new ResponseEntity<>(response.getResponseMessage(), HttpStatus.OK);
+
+    }
+
+    @ResponseBody
+    @PostMapping(value = "/schedules/register")
+    public HttpEntity<String> requestBodyToRegister(@RequestBody RequestToRegisterDto body) throws IOException {
+        ResponseToRegisterUserDto response = scheduleService.registerToDatabase(body);
+        return new ResponseEntity<>(response.getResponseMessage(), HttpStatus.OK);
+
+    }
+    @ResponseBody
+    @PutMapping(value = "/schedules/user-profile")
+    public HttpEntity<String> requestBodyToEditUser(@RequestBody RequestToEditUserDto body) throws IOException {
+        ResponseToEditUserDto response = scheduleService.editUserToDatabase(body);
         return new ResponseEntity<>(response.getResponseMessage(), HttpStatus.OK);
 
     }
