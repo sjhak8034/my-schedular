@@ -1,12 +1,5 @@
 package com.example.jhschedular.repository;
 
-import com.example.jhschedular.dto.request.RequestToDeleteDto;
-import com.example.jhschedular.dto.request.RequestToEditDto;
-import com.example.jhschedular.dto.request.RequestToEditUserDto;
-import com.example.jhschedular.dto.request.RequestToPostDto;
-import com.example.jhschedular.dto.request.RequestToRegisterDto;
-import com.example.jhschedular.dto.request.RequestToSearchByDateDto;
-import com.example.jhschedular.dto.request.RequestToViewDto;
 import com.example.jhschedular.dto.response.ResponseToDeleteScheduleDto;
 import com.example.jhschedular.dto.response.ResponseToEditDto;
 import com.example.jhschedular.dto.response.ResponseToEditUserDto;
@@ -14,6 +7,13 @@ import com.example.jhschedular.dto.response.ResponseToPostScheduleDto;
 import com.example.jhschedular.dto.response.ResponseToRegisterUserDto;
 import com.example.jhschedular.dto.response.ResponseToSearchScheduleListDto;
 import com.example.jhschedular.dto.response.ResponseToViewScheduleDto;
+import com.example.jhschedular.entity.RequestToDeleteEntity;
+import com.example.jhschedular.entity.RequestToEditEntity;
+import com.example.jhschedular.entity.RequestToEditUserEntity;
+import com.example.jhschedular.entity.RequestToPostEntity;
+import com.example.jhschedular.entity.RequestToRegisterEntity;
+import com.example.jhschedular.entity.RequestToSearchByDateEntity;
+import com.example.jhschedular.entity.RequestToViewEntity;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -32,19 +32,18 @@ public class ScheduleRepository   {
     public ScheduleRepository(DataSource dataSource) {
         this.jdbcTemplate = new JdbcTemplate(dataSource);
     }
-    public ResponseToPostScheduleDto saveSchedule(RequestToPostDto requestDto ) {
+    public ResponseToPostScheduleDto saveSchedule(RequestToPostEntity entity) {
         SimpleJdbcInsert simpleJdbcInsert = new SimpleJdbcInsert(this.jdbcTemplate);
         simpleJdbcInsert.withTableName("schedules_v2").usingGeneratedKeyColumns("schedule_id");
         MapSqlParameterSource params = new MapSqlParameterSource();
 
-        params.addValue("title", requestDto.getTitle());
-        params.addValue("content", requestDto.getContent());
-        params.addValue("user_name", requestDto.getUserName());
-        params.addValue("password", requestDto.getPassword());
-        params.addValue("post_date", requestDto.getPostDate());
-        params.addValue("edit_date", requestDto.getPostDate());
-        params.addValue("edit_date", requestDto.getPostDate());
-        params.addValue("user_id", requestDto.getUserId().get());
+        params.addValue("title", entity.getTitle());
+        params.addValue("content", entity.getContent());
+        params.addValue("user_name", entity.getUserName());
+        params.addValue("password", entity.getPassword());
+        params.addValue("post_date", entity.getPostDate());
+        params.addValue("edit_date", entity.getEditDate());
+        params.addValue("user_id", entity.getUserId().get());
         try {
             Number scheduleId = simpleJdbcInsert.executeAndReturnKey(params);
             return new ResponseToPostScheduleDto( Optional.of(scheduleId).map(Number::longValue));
@@ -55,10 +54,10 @@ public class ScheduleRepository   {
 
     }
 
-    public ResponseToEditDto editSchedule(RequestToEditDto requestDto ){
-        int result = jdbcTemplate.update("update schedules_v2 set user_name= ?, edit_date = ?, title = ?, content = ? where schedule_id = ?",
-                requestDto.getUserName(),requestDto.getEditDate(),requestDto.getTitle(), requestDto.getContent(), requestDto.getScheduleId());
-        return new ResponseToEditDto(requestDto.getScheduleId(),result );
+    public ResponseToEditDto editSchedule(RequestToEditEntity entity ){
+        int result = jdbcTemplate.update("update schedules_v2 set user_name= ?, edit_date = ?, title = ?, content = ? where schedule_id = ? and password = ?",
+                entity.getUserName(), entity.getEditDate(), entity.getTitle(), entity.getContent(), entity.getScheduleId(),entity.getPassword());
+        return new ResponseToEditDto(entity.getScheduleId(),result );
     }
 
     private RowMapper<ResponseToSearchScheduleListDto> scheduleRowMapperForSearch(){
@@ -71,11 +70,11 @@ public class ScheduleRepository   {
         );
     }
 
-    public List<ResponseToSearchScheduleListDto> searchScheduleByDate(RequestToSearchByDateDto requestDto) {
+    public List<ResponseToSearchScheduleListDto> searchScheduleByDate(RequestToSearchByDateEntity entity) {
         return jdbcTemplate.query("select * from schedules_v2 where user_id = ? and edit_date between ? and ? " +
                 "order by schedule_id asc limit ? offset ?",new Object[]{
-                requestDto.getUserId(),requestDto.getStartDate(), requestDto.getEndDate(),10,
-                (requestDto.getSchedulePage()-1)*10
+                entity.getUserId(), entity.getStartDate(), entity.getEndDate(),entity.getPageSize(),
+                entity.getOffset()
         }, scheduleRowMapperForSearch());
     }
 
@@ -90,25 +89,25 @@ public class ScheduleRepository   {
         );
     }
 
-    public Optional<ResponseToViewScheduleDto> viewSchedule(RequestToViewDto requestDto ){
-        List<ResponseToViewScheduleDto> result = jdbcTemplate.query("select * from schedules_v2 where schedule_id = ?", scheduleRowMapperForView(), requestDto.getScheduleId());
+    public Optional<ResponseToViewScheduleDto> viewSchedule(RequestToViewEntity entity ){
+        List<ResponseToViewScheduleDto> result = jdbcTemplate.query("select * from schedules_v2 where schedule_id = ?", scheduleRowMapperForView(), entity.getScheduleId());
         return result.stream().findAny();
     }
 
-    public ResponseToDeleteScheduleDto deleteSchedule(RequestToDeleteDto requestDto ){
-        return new ResponseToDeleteScheduleDto(requestDto.getScheduleId(),jdbcTemplate.update("delete from schedules_v2 where schedule_id = ? AND password = ?", requestDto.getScheduleId(), requestDto.getPassword()));
+    public ResponseToDeleteScheduleDto deleteSchedule(RequestToDeleteEntity entity ){
+        return new ResponseToDeleteScheduleDto(entity.getScheduleId(),jdbcTemplate.update("delete from schedules_v2 where schedule_id = ? AND password = ?", entity.getScheduleId(), entity.getPassword()));
     }
 
-    public ResponseToRegisterUserDto registerUser(RequestToRegisterDto requestDto ) {
+    public ResponseToRegisterUserDto registerUser(RequestToRegisterEntity entity ) {
         SimpleJdbcInsert simpleJdbcInsert = new SimpleJdbcInsert(this.jdbcTemplate);
         simpleJdbcInsert.withTableName("user").usingGeneratedKeyColumns("user_id");
         MapSqlParameterSource params = new MapSqlParameterSource();
 
-        params.addValue("user_name", requestDto.getUserName());
-        params.addValue("password", requestDto.getPassword());
-        params.addValue("register_date", requestDto.getRegisterDate());
-        params.addValue("edit_date", requestDto.getEditDate());
-        params.addValue("email", requestDto.getEmail());
+        params.addValue("user_name", entity.getUserName());
+        params.addValue("password", entity.getPassword());
+        params.addValue("register_date", entity.getRegisterDate());
+        params.addValue("edit_date", entity.getEditDate());
+        params.addValue("email", entity.getEmail());
 
         try {
             Number userId = simpleJdbcInsert.executeAndReturnKey(params);
@@ -119,9 +118,9 @@ public class ScheduleRepository   {
         }
 
     }
-    public ResponseToEditUserDto editUser(RequestToEditUserDto requestDto ){
+    public ResponseToEditUserDto editUser(RequestToEditUserEntity entity ){
         int result = jdbcTemplate.update("update user set user_name= ?, edit_date = ?, email = ? where user_id = ?",
-                requestDto.getUserName(), requestDto.getEditDate(), requestDto.getEmail(), requestDto.getUserId());
-        return new ResponseToEditUserDto(requestDto.getUserId(),result );
+                entity.getUserName(), entity.getEditDate(), entity.getEmail(), entity.getUserId());
+        return new ResponseToEditUserDto(entity.getUserId(),result );
     }
 }

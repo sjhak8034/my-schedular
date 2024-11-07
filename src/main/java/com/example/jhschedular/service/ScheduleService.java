@@ -29,25 +29,25 @@ public class ScheduleService {
         this.scheduleRepository = scheduleRepository;
     }
 
-    public ResponseToPostScheduleDto saveToDatabase(RequestToPostDto requestDto) {
-        return scheduleRepository.saveSchedule(requestDto);
+    public ResponseToPostScheduleDto saveToDatabase(RequestToPostDto requestDto, String userName, Optional<Long> userId) {
+        return scheduleRepository.saveSchedule(requestDto.toEntity(userName,userId));
     }
-    public ResponseToEditDto editToDatabase(RequestToEditDto requestDto) {
-        return scheduleRepository.editSchedule(requestDto);
+    public ResponseToEditDto editToDatabase(RequestToEditDto requestDto,Long scheduleId ) {
+        return scheduleRepository.editSchedule(requestDto.toEntity(scheduleId));
     }
     public List<ResponseToSearchScheduleListDto> searchToDatabaseByDate(RequestToSearchByDateDto requestDto) {
-        return scheduleRepository.searchScheduleByDate(requestDto);
+        return scheduleRepository.searchScheduleByDate(requestDto.toEntity());
     }
     public Optional<ResponseToViewScheduleDto> viewToDatabase(RequestToViewDto requestDto) {
-        return scheduleRepository.viewSchedule(requestDto);
+        return scheduleRepository.viewSchedule(requestDto.toEntity());
     }
-    public ResponseToDeleteScheduleDto deleteToDatabase(RequestToDeleteDto requestDto) {
-        return scheduleRepository.deleteSchedule(requestDto);
+    public ResponseToDeleteScheduleDto deleteToDatabase(RequestToDeleteDto requestDto,Long scheduleId) {
+        return scheduleRepository.deleteSchedule(requestDto.toEntity(scheduleId));
     }
     public ResponseToRegisterUserDto registerToDatabase(RequestToRegisterDto requestDto) {
-        return scheduleRepository.registerUser(requestDto);
+        return scheduleRepository.registerUser(requestDto.toEntity());
     }
-    public ResponseToEditUserDto editUserToDatabase(RequestToEditUserDto requestDto) {
-        return scheduleRepository.editUser(requestDto);
+    public ResponseToEditUserDto editUserToDatabase(RequestToEditUserDto requestDto,Long userId) {
+        return scheduleRepository.editUser(requestDto.toEntity(userId));
     }
 }
