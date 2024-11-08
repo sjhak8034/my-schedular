@@ -2,7 +2,8 @@ package com.example.jhschedular.service;
 
 import com.example.jhschedular.dto.mapper.scheduleMapper;
 import com.example.jhschedular.dto.mapper.userMapper;
-import com.example.jhschedular.dto.request.user.RequestToDeleteUserDto;
+import com.example.jhschedular.dto.request.schedule.RequestToDeleteScheduleDto;
+import com.example.jhschedular.dto.request.schedule.RequestToDeleteUserDto;
 import com.example.jhschedular.dto.request.schedule.RequestToEditScheduleDto;
 import com.example.jhschedular.dto.request.user.RequestToEditUserDto;
 import com.example.jhschedular.dto.request.schedule.RequestToPostScheduleDto;
@@ -60,7 +61,7 @@ public class ScheduleServiceimpl implements ScheduleService {
         return scheduleRepository.viewSchedule(scheduleMapper.toEntity(requestDto));
     }
     @Override
-    public ResponseToDeleteScheduleDto deleteToDatabase(RequestToDeleteUserDto requestDto, Long scheduleId) {
+    public ResponseToDeleteScheduleDto deleteToDatabase(RequestToDeleteScheduleDto requestDto, Long scheduleId) {
         return scheduleRepository.deleteSchedule(scheduleMapper.toEntity(requestDto,scheduleId));
     }
     @Override

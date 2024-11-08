@@ -1,6 +1,6 @@
 package com.example.jhschedular.service;
 
-import com.example.jhschedular.dto.request.user.RequestToDeleteUserDto;
+import com.example.jhschedular.dto.request.schedule.RequestToDeleteUserDto;
 import com.example.jhschedular.dto.request.schedule.RequestToEditScheduleDto;
 import com.example.jhschedular.dto.request.user.RequestToEditUserDto;
 import com.example.jhschedular.dto.request.schedule.RequestToPostScheduleDto;

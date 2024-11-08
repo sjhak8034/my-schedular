@@ -1,6 +1,6 @@
 package com.example.jhschedular.dto.mapper;
 
-import com.example.jhschedular.dto.request.user.RequestToDeleteUserDto;
+import com.example.jhschedular.dto.request.schedule.RequestToDeleteScheduleDto;
 import com.example.jhschedular.dto.request.schedule.RequestToEditScheduleDto;
 import com.example.jhschedular.dto.request.schedule.RequestToPostScheduleDto;
 import com.example.jhschedular.dto.request.schedule.RequestToSearchScheduleByDateDto;
@@ -8,7 +8,7 @@ import com.example.jhschedular.dto.request.schedule.RequestToViewScheduleDto;
 import com.example.jhschedular.entity.Schedule;
 
 public class scheduleMapper {
-    public static Schedule toEntity(RequestToDeleteUserDto requestToDeleteUserDto, Long scheduleId) {
+    public static Schedule toEntity(RequestToDeleteScheduleDto requestToDeleteUserDto, Long scheduleId) {
         return Schedule.delete(scheduleId, requestToDeleteUserDto.getPassword());
     }
 
