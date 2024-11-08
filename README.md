@@ -202,7 +202,7 @@ responseMessage : scheduleId: 8 deleted
 
 
 ## 2. ERD
-![image](https://github.com/user-attachments/assets/0b597ad7-22c1-437c-a93a-c4e9ee08d404)
+![image](https://github.com/user-attachments/assets/5739eab7-6dc6-4cab-8cf8-8d210f92440a)
 ## 3. Query 목록
 
 
