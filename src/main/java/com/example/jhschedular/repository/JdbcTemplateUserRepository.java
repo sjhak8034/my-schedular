@@ -20,6 +20,12 @@ public class JdbcTemplateUserRepository implements UserRepository {
     public JdbcTemplateUserRepository(DataSource dataSource) {
         this.jdbcTemplate = new JdbcTemplate(dataSource);
     }
+
+    /**
+     * 유저 등록을 위한 메솓,
+     * @param entity
+     * @return ResponseToRegisterUserDto
+     */
     @Override
     public ResponseToRegisterUserDto registerUser(User entity) {
         SimpleJdbcInsert simpleJdbcInsert = new SimpleJdbcInsert(this.jdbcTemplate);
@@ -40,6 +46,12 @@ public class JdbcTemplateUserRepository implements UserRepository {
         }
 
     }
+
+    /**
+     * 유저 정보 수정을 위한 메소드
+     * @param entity
+     * @return ResponseToEditUserDto
+     */
     @Override
     public ResponseToEditUserDto editUser(User entity) {
         int result = jdbcTemplate.update("update user set user_name= ?, edit_date = ?, email = ? where user_id = ?",

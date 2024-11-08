@@ -4,7 +4,7 @@ import com.example.jhschedular.dto.request.user.RequestToEditUserDto;
 import com.example.jhschedular.dto.request.user.RequestToRegisterUserDto;
 import com.example.jhschedular.dto.response.user.ResponseToEditUserDto;
 import com.example.jhschedular.dto.response.user.ResponseToRegisterUserDto;
-import com.example.jhschedular.service.ScheduleServiceimpl;
+import com.example.jhschedular.service.UserServiceImpl;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,22 +18,38 @@ import org.springframework.web.bind.annotation.RestController;
 import java.io.IOException;
 @RestController
 public class UserController {
-    private final ScheduleServiceimpl scheduleService;
-    public UserController(ScheduleServiceimpl scheduleService) {
-        this.scheduleService = scheduleService;
+    private final UserServiceImpl userService;
+
+    public UserController(UserServiceImpl userService) {
+        this.userService = userService;
 
     }
+
+    /**
+     * 유저 등록을 위한 메소드
+     * @param body 유저 등록을 위한 정보
+     * @return 유저 식별자 전달
+     * @throws IOException
+     */
     @ResponseBody
     @PostMapping(value = "/schedules/register")
     public HttpEntity<ResponseToRegisterUserDto> controllerToRegister(@RequestBody RequestToRegisterUserDto body) throws IOException {
-        ResponseToRegisterUserDto response = scheduleService.registerToDatabase(body);
+        ResponseToRegisterUserDto response = userService.registerToDatabase(body);
         return new ResponseEntity<>(response, HttpStatus.OK);
 
     }
+
+    /**
+     *  유저 정보 수정을 위한 메소드
+     * @param userId 유저 식별자
+     * @param body 유저가 작성한 변경내용
+     * @return 유저식별자 및 결과 반환
+     * @throws IOException
+     */
     @ResponseBody
     @PutMapping(value = "/schedules/user-profile/{userId}")
     public HttpEntity<ResponseToEditUserDto> controllerToEditUser(@PathVariable("userId") Long userId, @RequestBody RequestToEditUserDto body) throws IOException {
-        ResponseToEditUserDto response = scheduleService.editUserToDatabase(body,userId);
+        ResponseToEditUserDto response = userService.editUserToDatabase(body,userId);
         return new ResponseEntity<>(response, HttpStatus.OK);
 
     }

@@ -23,6 +23,12 @@ public class JdbcTemplateScheduleRepository implements ScheduleRepository {
     public JdbcTemplateScheduleRepository(DataSource dataSource) {
         this.jdbcTemplate = new JdbcTemplate(dataSource);
     }
+
+    /**
+     * 게시글 저장을 위한 메소드
+     * @param entity
+     * @return ResponseToPostScheduleDto
+     */
     @Override
     public ResponseToPostScheduleDto saveSchedule(Schedule entity) {
         SimpleJdbcInsert simpleJdbcInsert = new SimpleJdbcInsert(this.jdbcTemplate);
@@ -45,12 +51,23 @@ public class JdbcTemplateScheduleRepository implements ScheduleRepository {
         }
 
     }
+
+    /**
+     *  게시글 수정을 위한 메소드
+     * @param entity
+     * @return ResponseToEditScheduleDto
+     */
     @Override
     public ResponseToEditScheduleDto editSchedule(Schedule entity){
         int result = jdbcTemplate.update("update schedules set user_name= ?, edit_date = ?, title = ?, content = ? where schedule_id = ? and password = ?",
                 entity.getUserName(), entity.getEditDate(), entity.getTitle(), entity.getContent(), entity.getScheduleId(),entity.getPassword());
         return new ResponseToEditScheduleDto(entity.getScheduleId(),result );
     }
+
+    /**
+     * ResponseToSearchScheduleListDto 와 database 검색 결과를 연결하기 위한 메소드
+     * @return RowMapper<ResponseToSearchScheduleListDto>
+     */
     @Override
     public RowMapper<ResponseToSearchScheduleListDto> scheduleRowMapperForSearch(){
         return (rs, rowNum) -> new ResponseToSearchScheduleListDto(
@@ -61,6 +78,16 @@ public class JdbcTemplateScheduleRepository implements ScheduleRepository {
                 rs.getString("edit_date")
         );
     }
+
+    /**
+     *  게시글 검색을 위한 메소드
+     * @param entity
+     * @param startDate
+     * @param endDate
+     * @param pageSize
+     * @param offset 게시글 조회결과 offset 숫자만큼 무시하고 반환
+     * @return List<ResponseToSearchScheduleListDto>
+     */
     @Override
     public List<ResponseToSearchScheduleListDto> searchScheduleByDate(Schedule entity, String startDate, String endDate, Long pageSize, Long offset) {
         return jdbcTemplate.query("select * from schedules where user_id = ? and edit_date between ? and ? " +
@@ -69,6 +96,11 @@ public class JdbcTemplateScheduleRepository implements ScheduleRepository {
                 offset
         }, scheduleRowMapperForSearch());
     }
+
+    /**
+     * 조회 결과를 dto에 연결하기 위한 메소드
+     * @return RowMapper<ResponseToViewScheduleDto>
+     */
     @Override
     public RowMapper<ResponseToViewScheduleDto> scheduleRowMapperForView(){
         return (rs, rowNum) -> new ResponseToViewScheduleDto(
@@ -80,11 +112,23 @@ public class JdbcTemplateScheduleRepository implements ScheduleRepository {
                 rs.getString("edit_date")
         );
     }
+
+    /**
+     * 게시글 조회를 위한 메소드
+     * @param entity
+     * @return Optional<ResponseToViewScheduleDto>
+     */
     @Override
     public Optional<ResponseToViewScheduleDto> viewSchedule(Schedule entity){
         List<ResponseToViewScheduleDto> result = jdbcTemplate.query("select * from schedules where schedule_id = ?", scheduleRowMapperForView(), entity.getScheduleId());
         return result.stream().findAny();
     }
+
+    /**
+     * 게시글 삭제를 위한 메소드
+     * @param entity
+     * @return ResponseToDeleteScheduleDto
+     */
     @Override
     public ResponseToDeleteScheduleDto deleteSchedule(Schedule entity){
         return new ResponseToDeleteScheduleDto(entity.getScheduleId(),jdbcTemplate.update("delete from schedules where schedule_id = ? AND password = ?", entity.getScheduleId(), entity.getPassword()));

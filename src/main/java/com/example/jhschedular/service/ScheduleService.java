@@ -31,7 +31,5 @@ public interface ScheduleService {
 
     ResponseToDeleteScheduleDto deleteToDatabase(RequestToDeleteScheduleDto requestDto, Long scheduleId);
 
-    ResponseToRegisterUserDto registerToDatabase(RequestToRegisterUserDto requestDto);
 
-    ResponseToEditUserDto editUserToDatabase(RequestToEditUserDto requestDto, Long userId);
 }

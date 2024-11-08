@@ -6,13 +6,12 @@ import com.example.jhschedular.dto.request.schedule.RequestToEditScheduleDto;
 import com.example.jhschedular.dto.request.schedule.RequestToPostScheduleDto;
 import com.example.jhschedular.dto.request.schedule.RequestToSearchScheduleByDateDto;
 import com.example.jhschedular.dto.request.schedule.RequestToViewScheduleDto;
-import com.example.jhschedular.dto.request.schedule.RequestToDeleteUserDto;
 import com.example.jhschedular.dto.response.schedule.ResponseToDeleteScheduleDto;
 import com.example.jhschedular.dto.response.schedule.ResponseToEditScheduleDto;
 import com.example.jhschedular.dto.response.schedule.ResponseToPostScheduleDto;
 import com.example.jhschedular.dto.response.schedule.ResponseToSearchScheduleListDto;
 import com.example.jhschedular.dto.response.schedule.ResponseToViewScheduleDto;
-import com.example.jhschedular.service.ScheduleServiceimpl;
+import com.example.jhschedular.service.ScheduleServiceImpl;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -33,8 +32,8 @@ import java.util.Optional;
 
 @RestController
 public class ScheduleController {
-    private final ScheduleServiceimpl scheduleService;
-    public ScheduleController(ScheduleServiceimpl scheduleService) {
+    private final ScheduleServiceImpl scheduleService;
+    public ScheduleController(ScheduleServiceImpl scheduleService) {
         this.scheduleService = scheduleService;
 
     }
@@ -112,7 +111,7 @@ public class ScheduleController {
      * 게시글 삭제를 위한 메소드
      * @param scheduleId 게시글 식별자
      * @param body 게시글 삭제를 위한 정보 password를 받아옴
-     * @return
+     * @return 삭제 게시글 식별자 및 결과 전달
      * @throws IOException
      */
     @ResponseBody
