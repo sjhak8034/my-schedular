@@ -9,11 +9,5 @@ import java.util.Optional;
 @AllArgsConstructor
 public class ResponseToPostScheduleDto {
     private Optional<Long> scheduleId;
-    public String getResponseMessage() {
-        if (scheduleId.isPresent()) {
-            return String.format("responseMessage : scheduleId: %d updated", scheduleId.get());
-        }
-        return "responseMessage : update failed";
 
-    }
 }

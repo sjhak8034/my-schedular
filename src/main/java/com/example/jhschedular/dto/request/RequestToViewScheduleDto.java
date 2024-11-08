@@ -1,13 +1,12 @@
-package com.example.jhschedular.entity;
+package com.example.jhschedular.dto.request;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Data
+@Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class RequestToDeleteEntity {
+public class RequestToViewScheduleDto {
     private Long scheduleId;
-    private String password;
 }

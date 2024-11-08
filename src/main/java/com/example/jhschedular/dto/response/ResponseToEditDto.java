@@ -8,10 +8,5 @@ import lombok.Data;
 public class ResponseToEditDto {
     private Long scheduleId;
     private int result;
-    public String getResponseMessage() {
-        if (result == 0){
-            return String.format("responseMessage : scheduleId: %d update failed", scheduleId);
-        }
-        return String.format("responseMessage : scheduleId: %d updated", scheduleId);
-    }
+
 }

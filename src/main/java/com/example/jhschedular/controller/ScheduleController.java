@@ -1,13 +1,13 @@
 package com.example.jhschedular.controller;
 
 
-import com.example.jhschedular.dto.request.RequestToDeleteDto;
-import com.example.jhschedular.dto.request.RequestToEditDto;
+import com.example.jhschedular.dto.request.RequestToDeleteUserDto;
+import com.example.jhschedular.dto.request.RequestToEditScheduleDto;
 import com.example.jhschedular.dto.request.RequestToEditUserDto;
-import com.example.jhschedular.dto.request.RequestToPostDto;
-import com.example.jhschedular.dto.request.RequestToRegisterDto;
-import com.example.jhschedular.dto.request.RequestToSearchByDateDto;
-import com.example.jhschedular.dto.request.RequestToViewDto;
+import com.example.jhschedular.dto.request.RequestToPostScheduleDto;
+import com.example.jhschedular.dto.request.RequestToRegisterUserDto;
+import com.example.jhschedular.dto.request.RequestToSearchScheduleByDateDto;
+import com.example.jhschedular.dto.request.RequestToViewScheduleDto;
 import com.example.jhschedular.dto.response.ResponseToDeleteScheduleDto;
 import com.example.jhschedular.dto.response.ResponseToEditDto;
 import com.example.jhschedular.dto.response.ResponseToEditUserDto;
@@ -43,19 +43,19 @@ public class ScheduleController {
     }
 
     @ResponseBody
-    @PostMapping(value = "/schedules/users/{userId}/{userName}")
-    public HttpEntity<String> controllerToPost(@PathVariable("userId") Optional<Long> userId,@PathVariable("userName") String userName ,@RequestBody RequestToPostDto body) throws IOException {
+    @PostMapping(value = "/schedules/users/{userId}")
+    public HttpEntity<ResponseToPostScheduleDto> controllerToPost(@PathVariable("userId") Long userId,@RequestBody RequestToPostScheduleDto body) throws IOException {
 
-        ResponseToPostScheduleDto response = scheduleService.saveToDatabase(body,userName,userId);
-        return new ResponseEntity<>(response.getResponseMessage(), HttpStatus.OK);
+        ResponseToPostScheduleDto response = scheduleService.saveToDatabase(body,userId);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @ResponseBody
     @PutMapping(value = "/schedules/{scheduleId}")
-    public HttpEntity<String> controllerToEditSchedule(@RequestBody RequestToEditDto body, @PathVariable("scheduleId") Long scheduleId) throws IOException {
+    public HttpEntity<ResponseToEditDto> controllerToEditSchedule(@RequestBody RequestToEditScheduleDto body, @PathVariable("scheduleId") Long scheduleId) throws IOException {
         ResponseToEditDto response = scheduleService.editToDatabase(body,scheduleId);
 
-        return new ResponseEntity<>(response.getResponseMessage(), HttpStatus.OK);
+        return new ResponseEntity<>(response, HttpStatus.OK);
 
     }
 
@@ -63,47 +63,44 @@ public class ScheduleController {
     @GetMapping(value = "/schedules/users/{userId}/")
     public HttpEntity<List<ResponseToSearchScheduleListDto>> controllerToSearchScheduleListByDate(
             @RequestParam(value = "endDate",defaultValue = "9999-01-01" ) String endDate, @RequestParam(value = "startDate",defaultValue = "1000-01-01") String startDate,
-            @PathVariable(value = "userId" ) String userId , @RequestParam(value = "schedulePage") Long schedulePage,@RequestParam(value = "pageSize") Long pageSize
+            @PathVariable(value = "userId" ) Long userId , @RequestParam(value = "schedulePage") Long schedulePage,@RequestParam(value = "pageSize") Long pageSize
            ) throws IOException {
 
-        List<ResponseToSearchScheduleListDto> response = scheduleService.searchToDatabaseByDate(new RequestToSearchByDateDto(startDate,endDate,userId,schedulePage,pageSize));
+        List<ResponseToSearchScheduleListDto> response = scheduleService.searchToDatabaseByDate(new RequestToSearchScheduleByDateDto(startDate,endDate,userId,schedulePage,pageSize));
 
         return new ResponseEntity<>(response, HttpStatus.OK);
 
     }
 
-
-
-
     @ResponseBody
     @GetMapping(value = "/schedules/{scheduleId}")
     public HttpEntity<Optional<ResponseToViewScheduleDto>> controllerToViewSchedule(@PathVariable("scheduleId") Long scheduleId) throws IOException {
 
-        Optional<ResponseToViewScheduleDto> response = scheduleService.viewToDatabase(new RequestToViewDto(scheduleId)) ;
+        Optional<ResponseToViewScheduleDto> response = scheduleService.viewToDatabase(new RequestToViewScheduleDto(scheduleId)) ;
 
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @ResponseBody
     @DeleteMapping(value = "/schedules/{scheduleId}")
-    public HttpEntity<String> controllerToDelete(@PathVariable("scheduleId") Long scheduleId, @RequestBody RequestToDeleteDto body) throws IOException {
+    public HttpEntity<ResponseToDeleteScheduleDto> controllerToDelete(@PathVariable("scheduleId") Long scheduleId, @RequestBody RequestToDeleteUserDto body) throws IOException {
         ResponseToDeleteScheduleDto response = scheduleService.deleteToDatabase(body,scheduleId);
-        return new ResponseEntity<>(response.getResponseMessage(), HttpStatus.OK);
+        return new ResponseEntity<>(response, HttpStatus.OK);
 
     }
 
     @ResponseBody
     @PostMapping(value = "/schedules/register")
-    public HttpEntity<String> controllerToRegister(@RequestBody RequestToRegisterDto body) throws IOException {
+    public HttpEntity<ResponseToRegisterUserDto> controllerToRegister(@RequestBody RequestToRegisterUserDto body) throws IOException {
         ResponseToRegisterUserDto response = scheduleService.registerToDatabase(body);
-        return new ResponseEntity<>(response.getResponseMessage(), HttpStatus.OK);
+        return new ResponseEntity<>(response, HttpStatus.OK);
 
     }
     @ResponseBody
     @PutMapping(value = "/schedules/user-profile/{userId}")
-    public HttpEntity<String> controllerToEditUser(@PathVariable("userId") Long userId, @RequestBody RequestToEditUserDto body) throws IOException {
+    public HttpEntity<ResponseToEditUserDto> controllerToEditUser(@PathVariable("userId") Long userId, @RequestBody RequestToEditUserDto body) throws IOException {
         ResponseToEditUserDto response = scheduleService.editUserToDatabase(body,userId);
-        return new ResponseEntity<>(response.getResponseMessage(), HttpStatus.OK);
+        return new ResponseEntity<>(response, HttpStatus.OK);
 
     }
 }

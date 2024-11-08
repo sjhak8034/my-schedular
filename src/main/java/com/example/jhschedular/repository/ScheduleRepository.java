@@ -7,13 +7,8 @@ import com.example.jhschedular.dto.response.ResponseToPostScheduleDto;
 import com.example.jhschedular.dto.response.ResponseToRegisterUserDto;
 import com.example.jhschedular.dto.response.ResponseToSearchScheduleListDto;
 import com.example.jhschedular.dto.response.ResponseToViewScheduleDto;
-import com.example.jhschedular.entity.RequestToDeleteEntity;
-import com.example.jhschedular.entity.RequestToEditEntity;
-import com.example.jhschedular.entity.RequestToEditUserEntity;
-import com.example.jhschedular.entity.RequestToPostEntity;
-import com.example.jhschedular.entity.RequestToRegisterEntity;
-import com.example.jhschedular.entity.RequestToSearchByDateEntity;
-import com.example.jhschedular.entity.RequestToViewEntity;
+import com.example.jhschedular.entity.Schedule;
+import com.example.jhschedular.entity.User;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -32,9 +27,9 @@ public class ScheduleRepository   {
     public ScheduleRepository(DataSource dataSource) {
         this.jdbcTemplate = new JdbcTemplate(dataSource);
     }
-    public ResponseToPostScheduleDto saveSchedule(RequestToPostEntity entity) {
+    public ResponseToPostScheduleDto saveSchedule(Schedule entity) {
         SimpleJdbcInsert simpleJdbcInsert = new SimpleJdbcInsert(this.jdbcTemplate);
-        simpleJdbcInsert.withTableName("schedules_v2").usingGeneratedKeyColumns("schedule_id");
+        simpleJdbcInsert.withTableName("schedules").usingGeneratedKeyColumns("schedule_id");
         MapSqlParameterSource params = new MapSqlParameterSource();
 
         params.addValue("title", entity.getTitle());
@@ -43,7 +38,7 @@ public class ScheduleRepository   {
         params.addValue("password", entity.getPassword());
         params.addValue("post_date", entity.getPostDate());
         params.addValue("edit_date", entity.getEditDate());
-        params.addValue("user_id", entity.getUserId().get());
+        params.addValue("user_id", entity.getUserId());
         try {
             Number scheduleId = simpleJdbcInsert.executeAndReturnKey(params);
             return new ResponseToPostScheduleDto( Optional.of(scheduleId).map(Number::longValue));
@@ -54,8 +49,8 @@ public class ScheduleRepository   {
 
     }
 
-    public ResponseToEditDto editSchedule(RequestToEditEntity entity ){
-        int result = jdbcTemplate.update("update schedules_v2 set user_name= ?, edit_date = ?, title = ?, content = ? where schedule_id = ? and password = ?",
+    public ResponseToEditDto editSchedule(Schedule entity ){
+        int result = jdbcTemplate.update("update schedules set user_name= ?, edit_date = ?, title = ?, content = ? where schedule_id = ? and password = ?",
                 entity.getUserName(), entity.getEditDate(), entity.getTitle(), entity.getContent(), entity.getScheduleId(),entity.getPassword());
         return new ResponseToEditDto(entity.getScheduleId(),result );
     }
@@ -70,11 +65,11 @@ public class ScheduleRepository   {
         );
     }
 
-    public List<ResponseToSearchScheduleListDto> searchScheduleByDate(RequestToSearchByDateEntity entity) {
-        return jdbcTemplate.query("select * from schedules_v2 where user_id = ? and edit_date between ? and ? " +
-                "order by schedule_id asc limit ? offset ?",new Object[]{
-                entity.getUserId(), entity.getStartDate(), entity.getEndDate(),entity.getPageSize(),
-                entity.getOffset()
+    public List<ResponseToSearchScheduleListDto> searchScheduleByDate(Schedule entity,String startDate,String endDate,Long pageSize, Long offset) {
+        return jdbcTemplate.query("select * from schedules where user_id = ? and edit_date between ? and ? " +
+                "order by schedule_id desc limit ? offset ?",new Object[]{
+                entity.getUserId(), startDate, endDate,pageSize,
+                offset
         }, scheduleRowMapperForSearch());
     }
 
@@ -89,22 +84,21 @@ public class ScheduleRepository   {
         );
     }
 
-    public Optional<ResponseToViewScheduleDto> viewSchedule(RequestToViewEntity entity ){
-        List<ResponseToViewScheduleDto> result = jdbcTemplate.query("select * from schedules_v2 where schedule_id = ?", scheduleRowMapperForView(), entity.getScheduleId());
+    public Optional<ResponseToViewScheduleDto> viewSchedule(Schedule entity ){
+        List<ResponseToViewScheduleDto> result = jdbcTemplate.query("select * from schedules where schedule_id = ?", scheduleRowMapperForView(), entity.getScheduleId());
         return result.stream().findAny();
     }
 
-    public ResponseToDeleteScheduleDto deleteSchedule(RequestToDeleteEntity entity ){
-        return new ResponseToDeleteScheduleDto(entity.getScheduleId(),jdbcTemplate.update("delete from schedules_v2 where schedule_id = ? AND password = ?", entity.getScheduleId(), entity.getPassword()));
+    public ResponseToDeleteScheduleDto deleteSchedule(Schedule entity ){
+        return new ResponseToDeleteScheduleDto(entity.getScheduleId(),jdbcTemplate.update("delete from schedules where schedule_id = ? AND password = ?", entity.getScheduleId(), entity.getPassword()));
     }
 
-    public ResponseToRegisterUserDto registerUser(RequestToRegisterEntity entity ) {
+    public ResponseToRegisterUserDto registerUser(User entity ) {
         SimpleJdbcInsert simpleJdbcInsert = new SimpleJdbcInsert(this.jdbcTemplate);
         simpleJdbcInsert.withTableName("user").usingGeneratedKeyColumns("user_id");
         MapSqlParameterSource params = new MapSqlParameterSource();
 
         params.addValue("user_name", entity.getUserName());
-        params.addValue("password", entity.getPassword());
         params.addValue("register_date", entity.getRegisterDate());
         params.addValue("edit_date", entity.getEditDate());
         params.addValue("email", entity.getEmail());
@@ -114,11 +108,11 @@ public class ScheduleRepository   {
             return new ResponseToRegisterUserDto( Optional.of(userId).map(Number::longValue));
         }catch (DataIntegrityViolationException e){
             System.out.println(e.getMessage());
-            return null;
+            return new ResponseToRegisterUserDto(null);
         }
 
     }
-    public ResponseToEditUserDto editUser(RequestToEditUserEntity entity ){
+    public ResponseToEditUserDto editUser(User entity ){
         int result = jdbcTemplate.update("update user set user_name= ?, edit_date = ?, email = ? where user_id = ?",
                 entity.getUserName(), entity.getEditDate(), entity.getEmail(), entity.getUserId());
         return new ResponseToEditUserDto(entity.getUserId(),result );

@@ -10,10 +10,5 @@ import java.util.Optional;
 public class ResponseToRegisterUserDto {
     private Optional<Long> userId;
 
-    public String getResponseMessage(){
-        if (this.userId.isPresent()) {
-            return String.format("responseMessage : userId %d registered", this.userId.get());
-        }
-        return String.format("responseMessage : register failed");
-    }
+
 }

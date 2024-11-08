@@ -7,7 +7,9 @@ import lombok.NoArgsConstructor;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class RequestToEditUserDto {
+public class RequestToPostScheduleDto {
+    private String title;
+    private String content;
+    private String password;
     private String userName;
-    private String email;
 }

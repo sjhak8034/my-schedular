@@ -7,7 +7,6 @@ import lombok.NoArgsConstructor;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class RequestToEditUserDto {
-    private String userName;
-    private String email;
+public class RequestToDeleteUserDto {
+    private String password;
 }

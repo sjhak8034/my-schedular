@@ -1,21 +1,16 @@
-package com.example.jhschedular.entity;
+package com.example.jhschedular.dto.request;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Data
+@Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class RequestToSearchByDateEntity {
+public class RequestToSearchScheduleByDateDto {
     private String startDate;
     private String endDate;
-    private String userId;
+    private Long userId;
     private Long schedulePage;
     private Long pageSize;
-
-    public Long getOffset(){
-        return (schedulePage-1)*pageSize;
-    }
-
 }
