@@ -7,6 +7,6 @@ import lombok.Data;
 @AllArgsConstructor
 public class ResponseToEditUserDto {
     private Long userId;
-    private int result;
+
 
 }

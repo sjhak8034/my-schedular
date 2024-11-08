@@ -27,7 +27,7 @@ public class JdbcTemplateUserRepository implements UserRepository {
      * @return ResponseToRegisterUserDto
      */
     @Override
-    public ResponseToRegisterUserDto registerUser(User entity) {
+    public User registerUser(User entity) {
         SimpleJdbcInsert simpleJdbcInsert = new SimpleJdbcInsert(this.jdbcTemplate);
         simpleJdbcInsert.withTableName("user").usingGeneratedKeyColumns("user_id");
         MapSqlParameterSource params = new MapSqlParameterSource();
@@ -39,10 +39,10 @@ public class JdbcTemplateUserRepository implements UserRepository {
 
         try {
             Number userId = simpleJdbcInsert.executeAndReturnKey(params);
-            return new ResponseToRegisterUserDto(Optional.of(userId).map(Number::longValue));
+            return User.forUserId(Optional.of(userId).map(Number::longValue).get());
         } catch (DataIntegrityViolationException e) {
             System.out.println(e.getMessage());
-            return new ResponseToRegisterUserDto(null);
+            return null;
         }
 
     }
@@ -53,9 +53,12 @@ public class JdbcTemplateUserRepository implements UserRepository {
      * @return ResponseToEditUserDto
      */
     @Override
-    public ResponseToEditUserDto editUser(User entity) {
+    public User editUser(User entity) {
         int result = jdbcTemplate.update("update user set user_name= ?, edit_date = ?, email = ? where user_id = ?",
                 entity.getUserName(), entity.getEditDate(), entity.getEmail(), entity.getUserId());
-        return new ResponseToEditUserDto(entity.getUserId(), result);
+        if (result == 0) {
+            return null;
+        }
+        return User.forUserId(entity.getUserId());
     }
 }

@@ -1,6 +1,7 @@
 package com.example.jhschedular.service;
 
-import com.example.jhschedular.dto.mapper.scheduleMapper;
+import com.example.jhschedular.dto.mapper.schedule.ScheduleRequestMapper;
+import com.example.jhschedular.dto.mapper.schedule.ScheduleResponseMapper;
 import com.example.jhschedular.dto.request.schedule.RequestToDeleteScheduleDto;
 import com.example.jhschedular.dto.request.schedule.RequestToEditScheduleDto;
 import com.example.jhschedular.dto.request.schedule.RequestToPostScheduleDto;
@@ -11,10 +12,13 @@ import com.example.jhschedular.dto.response.schedule.ResponseToEditScheduleDto;
 import com.example.jhschedular.dto.response.schedule.ResponseToPostScheduleDto;
 import com.example.jhschedular.dto.response.schedule.ResponseToSearchScheduleListDto;
 import com.example.jhschedular.dto.response.schedule.ResponseToViewScheduleDto;
+import com.example.jhschedular.entity.Schedule;
 import com.example.jhschedular.repository.JdbcTemplateUserRepository;
 import com.example.jhschedular.repository.ScheduleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.Optional;
@@ -38,7 +42,11 @@ public class ScheduleServiceImpl implements ScheduleService {
      */
     @Override
     public ResponseToPostScheduleDto saveToDatabase(RequestToPostScheduleDto requestDto, Long userId) {
-        return scheduleRepository.saveSchedule(scheduleMapper.toEntity(userId,requestDto));
+        Schedule entity = scheduleRepository.saveSchedule(ScheduleRequestMapper.toEntity(userId,requestDto));
+        if (entity == null) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,"작성 실패");
+        }
+        return ScheduleResponseMapper.toPostDto(entity);
     }
 
     /**
@@ -49,7 +57,11 @@ public class ScheduleServiceImpl implements ScheduleService {
      */
     @Override
     public ResponseToEditScheduleDto editToDatabase(RequestToEditScheduleDto requestDto, Long scheduleId ) {
-        return scheduleRepository.editSchedule(scheduleMapper.toEntity(scheduleId,requestDto));
+        Schedule entity = scheduleRepository.editSchedule(ScheduleRequestMapper.toEntity(scheduleId,requestDto));
+        if (entity == null) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN,"수정 실패");
+        }
+        return ScheduleResponseMapper.toEditDto(entity);
     }
 
     /**
@@ -58,10 +70,11 @@ public class ScheduleServiceImpl implements ScheduleService {
      * @return
      */
     @Override
-    public List<ResponseToSearchScheduleListDto> searchToDatabaseByDate(RequestToSearchScheduleByDateDto requestDto) {
+    public ResponseToSearchScheduleListDto searchToDatabaseByDate(RequestToSearchScheduleByDateDto requestDto) {
         Long offset = (requestDto.getSchedulePage()-1)*requestDto.getPageSize();
-        return scheduleRepository.searchScheduleByDate(scheduleMapper.toEntity(requestDto),
+        List<Schedule> entity = scheduleRepository.searchScheduleByDate(ScheduleRequestMapper.toEntity(requestDto),
                 requestDto.getStartDate(),requestDto.getEndDate(),requestDto.getPageSize(),offset);
+        return ScheduleResponseMapper.toSearchDto(entity);
     }
 
     /**
@@ -70,8 +83,12 @@ public class ScheduleServiceImpl implements ScheduleService {
      * @return
      */
     @Override
-    public Optional<ResponseToViewScheduleDto> viewToDatabase(RequestToViewScheduleDto requestDto) {
-        return scheduleRepository.viewSchedule(scheduleMapper.toEntity(requestDto));
+    public ResponseToViewScheduleDto viewToDatabase(RequestToViewScheduleDto requestDto) {
+        Optional<Schedule> entity =  scheduleRepository.viewSchedule(ScheduleRequestMapper.toEntity(requestDto));
+        if (entity.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Does not Found");
+        }
+        return ScheduleResponseMapper.toViewDto(entity.get());
     }
 
     /**
@@ -82,7 +99,11 @@ public class ScheduleServiceImpl implements ScheduleService {
      */
     @Override
     public ResponseToDeleteScheduleDto deleteToDatabase(RequestToDeleteScheduleDto requestDto, Long scheduleId) {
-        return scheduleRepository.deleteSchedule(scheduleMapper.toEntity(requestDto,scheduleId));
+        Schedule entity = scheduleRepository.deleteSchedule(ScheduleRequestMapper.toEntity(requestDto,scheduleId));
+        if (entity == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Does not Found");
+        }
+        return ScheduleResponseMapper.toDeleteDto(entity);
     }
 
 

@@ -7,9 +7,4 @@ import lombok.Data;
 @AllArgsConstructor
 public class ResponseToDeleteScheduleDto {
     private long scheduleId;
-    private int result;
-
-
-
-
 }

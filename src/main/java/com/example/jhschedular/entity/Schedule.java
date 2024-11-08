@@ -98,4 +98,13 @@ public class Schedule {
     public static Schedule delete(Long scheduleId, String password) {
         return new Schedule(scheduleId, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, password, DEFAULT_ID, EMPTY_STRING, EMPTY_STRING);
     }
+
+    public static Schedule searchResult(Long scheduleId, String content, String title, String userName, String postDate, String editDate){
+        return new Schedule( scheduleId, title, content, userName, EMPTY_STRING, DEFAULT_ID, postDate, editDate);
+    }
+
+    public static Schedule forScheduleId(Long scheduleId) {
+        return new Schedule(scheduleId, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, DEFAULT_ID, EMPTY_STRING, EMPTY_STRING);
+    }
+
 }

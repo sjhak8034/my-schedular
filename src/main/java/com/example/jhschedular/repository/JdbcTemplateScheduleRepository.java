@@ -1,10 +1,5 @@
 package com.example.jhschedular.repository;
 
-import com.example.jhschedular.dto.response.schedule.ResponseToDeleteScheduleDto;
-import com.example.jhschedular.dto.response.schedule.ResponseToEditScheduleDto;
-import com.example.jhschedular.dto.response.schedule.ResponseToPostScheduleDto;
-import com.example.jhschedular.dto.response.schedule.ResponseToSearchScheduleListDto;
-import com.example.jhschedular.dto.response.schedule.ResponseToViewScheduleDto;
 import com.example.jhschedular.entity.Schedule;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -30,7 +25,7 @@ public class JdbcTemplateScheduleRepository implements ScheduleRepository {
      * @return ResponseToPostScheduleDto
      */
     @Override
-    public ResponseToPostScheduleDto saveSchedule(Schedule entity) {
+    public Schedule saveSchedule(Schedule entity) {
         SimpleJdbcInsert simpleJdbcInsert = new SimpleJdbcInsert(this.jdbcTemplate);
         simpleJdbcInsert.withTableName("schedules").usingGeneratedKeyColumns("schedule_id");
         MapSqlParameterSource params = new MapSqlParameterSource();
@@ -44,7 +39,7 @@ public class JdbcTemplateScheduleRepository implements ScheduleRepository {
         params.addValue("user_id", entity.getUserId());
         try {
             Number scheduleId = simpleJdbcInsert.executeAndReturnKey(params);
-            return new ResponseToPostScheduleDto( Optional.of(scheduleId).map(Number::longValue));
+            return Schedule.forScheduleId( Optional.of(scheduleId).map(Number::longValue).get());
         }catch (DataIntegrityViolationException e){
             System.out.println(e.getMessage());
             return null;
@@ -58,10 +53,13 @@ public class JdbcTemplateScheduleRepository implements ScheduleRepository {
      * @return ResponseToEditScheduleDto
      */
     @Override
-    public ResponseToEditScheduleDto editSchedule(Schedule entity){
+    public Schedule editSchedule(Schedule entity){
         int result = jdbcTemplate.update("update schedules set user_name= ?, edit_date = ?, title = ?, content = ? where schedule_id = ? and password = ?",
                 entity.getUserName(), entity.getEditDate(), entity.getTitle(), entity.getContent(), entity.getScheduleId(),entity.getPassword());
-        return new ResponseToEditScheduleDto(entity.getScheduleId(),result );
+        if (result == 0){
+            return null;
+        }
+        return Schedule.forScheduleId(entity.getScheduleId());
     }
 
     /**
@@ -69,10 +67,11 @@ public class JdbcTemplateScheduleRepository implements ScheduleRepository {
      * @return RowMapper<ResponseToSearchScheduleListDto>
      */
     @Override
-    public RowMapper<ResponseToSearchScheduleListDto> scheduleRowMapperForSearch(){
-        return (rs, rowNum) -> new ResponseToSearchScheduleListDto(
+    public RowMapper<Schedule> scheduleRowMapperForSearch(){
+        return (rs, rowNum) -> Schedule.searchResult(
                 rs.getLong("schedule_id"),
                 rs.getString("title"),
+                rs.getString("content"),
                 rs.getString("user_name"),
                 rs.getString("post_date"),
                 rs.getString("edit_date")
@@ -89,7 +88,8 @@ public class JdbcTemplateScheduleRepository implements ScheduleRepository {
      * @return List<ResponseToSearchScheduleListDto>
      */
     @Override
-    public List<ResponseToSearchScheduleListDto> searchScheduleByDate(Schedule entity, String startDate, String endDate, Long pageSize, Long offset) {
+    public List<Schedule> searchScheduleByDate(Schedule entity, String startDate, String endDate, Long pageSize, Long offset) {
+
         return jdbcTemplate.query("select * from schedules where user_id = ? and edit_date between ? and ? " +
                 "order by schedule_id desc limit ? offset ?",new Object[]{
                 entity.getUserId(), startDate, endDate,pageSize,
@@ -97,21 +97,7 @@ public class JdbcTemplateScheduleRepository implements ScheduleRepository {
         }, scheduleRowMapperForSearch());
     }
 
-    /**
-     * 조회 결과를 dto에 연결하기 위한 메소드
-     * @return RowMapper<ResponseToViewScheduleDto>
-     */
-    @Override
-    public RowMapper<ResponseToViewScheduleDto> scheduleRowMapperForView(){
-        return (rs, rowNum) -> new ResponseToViewScheduleDto(
-                rs.getLong("schedule_id"),
-                rs.getString("title"),
-                rs.getString("content"),
-                rs.getString("user_name"),
-                rs.getString("post_date"),
-                rs.getString("edit_date")
-        );
-    }
+
 
     /**
      * 게시글 조회를 위한 메소드
@@ -119,8 +105,9 @@ public class JdbcTemplateScheduleRepository implements ScheduleRepository {
      * @return Optional<ResponseToViewScheduleDto>
      */
     @Override
-    public Optional<ResponseToViewScheduleDto> viewSchedule(Schedule entity){
-        List<ResponseToViewScheduleDto> result = jdbcTemplate.query("select * from schedules where schedule_id = ?", scheduleRowMapperForView(), entity.getScheduleId());
+    public Optional<Schedule> viewSchedule(Schedule entity){
+        List<Schedule> result = jdbcTemplate.query("select * from schedules where schedule_id = ?", scheduleRowMapperForSearch(), entity.getScheduleId());
+
         return result.stream().findAny();
     }
 
@@ -130,8 +117,12 @@ public class JdbcTemplateScheduleRepository implements ScheduleRepository {
      * @return ResponseToDeleteScheduleDto
      */
     @Override
-    public ResponseToDeleteScheduleDto deleteSchedule(Schedule entity){
-        return new ResponseToDeleteScheduleDto(entity.getScheduleId(),jdbcTemplate.update("delete from schedules where schedule_id = ? AND password = ?", entity.getScheduleId(), entity.getPassword()));
+    public Schedule deleteSchedule(Schedule entity){
+        int result = jdbcTemplate.update("delete from schedules where schedule_id = ? AND password = ?", entity.getScheduleId(), entity.getPassword());
+        if (result == 0){
+            return null;
+        }
+        return Schedule.forScheduleId(entity.getScheduleId());
     }
 
 

@@ -38,11 +38,10 @@ public class User {
     /**
      * 유저등록 엔티티
      * @param userName
-     * @param password
      * @param email
      * @return
      */
-    public static User register(String userName, String password, String email) {
+    public static User register(String userName, String email) {
         String registerDate = getCurrentFormattedDate();
         return new User(EMPTY_USERID,userName, email,registerDate,registerDate);
     }
@@ -57,5 +56,8 @@ public class User {
     public static User edit(Long userId, String userName, String email) {
         String editDate = getCurrentFormattedDate();
         return new User(userId,userName, email,EMPTY_STRING,editDate);
+    }
+    public static User forUserId(Long userId) {;
+        return new User(userId,EMPTY_STRING,EMPTY_STRING,EMPTY_STRING,EMPTY_STRING);
     }
 }

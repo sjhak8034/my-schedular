@@ -1,17 +1,17 @@
-package com.example.jhschedular.dto.mapper;
+package com.example.jhschedular.dto.mapper.user;
 
 import com.example.jhschedular.dto.request.user.RequestToEditUserDto;
 import com.example.jhschedular.dto.request.user.RequestToRegisterUserDto;
 import com.example.jhschedular.entity.User;
 
-public class userMapper {
+public class UserRequestMapper {
     /**
      * 유저 등록을 메소드에 사용하는 dto entity 변환
      * @param requestToRegisterUserDto 유저등록 dto
      * @return user entity 반환
      */
     public static User toEntity(RequestToRegisterUserDto requestToRegisterUserDto) {
-        return User.register(requestToRegisterUserDto.getUserName(), requestToRegisterUserDto.getPassword(), requestToRegisterUserDto.getEmail());
+        return User.register(requestToRegisterUserDto.getUserName(), requestToRegisterUserDto.getEmail());
     }
 
     /**

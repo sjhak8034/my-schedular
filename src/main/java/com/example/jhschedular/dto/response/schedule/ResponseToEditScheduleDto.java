@@ -7,6 +7,4 @@ import lombok.Data;
 @AllArgsConstructor
 public class ResponseToEditScheduleDto {
     private Long scheduleId;
-    private int result;
-
 }

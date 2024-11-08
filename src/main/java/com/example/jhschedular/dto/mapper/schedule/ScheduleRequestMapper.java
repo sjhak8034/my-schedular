@@ -1,4 +1,4 @@
-package com.example.jhschedular.dto.mapper;
+package com.example.jhschedular.dto.mapper.schedule;
 
 import com.example.jhschedular.dto.request.schedule.RequestToDeleteScheduleDto;
 import com.example.jhschedular.dto.request.schedule.RequestToEditScheduleDto;
@@ -7,7 +7,7 @@ import com.example.jhschedular.dto.request.schedule.RequestToSearchScheduleByDat
 import com.example.jhschedular.dto.request.schedule.RequestToViewScheduleDto;
 import com.example.jhschedular.entity.Schedule;
 
-public class scheduleMapper {
+public class ScheduleRequestMapper {
     /**
      * 게시글 삭제 메소드에 사용하는 dto entity 변환
      * @param requestToDeleteUserDto 삭제 dto
