@@ -1,4 +1,4 @@
-package com.example.jhschedular.dto.request;
+package com.example.jhschedular.dto.request.schedule;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -7,7 +7,6 @@ import lombok.NoArgsConstructor;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class RequestToEditUserDto {
-    private String userName;
-    private String email;
+public class RequestToViewScheduleDto {
+    private Long scheduleId;
 }

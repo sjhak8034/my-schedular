@@ -1,7 +1,7 @@
 package com.example.jhschedular.dto.mapper;
 
-import com.example.jhschedular.dto.request.RequestToEditUserDto;
-import com.example.jhschedular.dto.request.RequestToRegisterUserDto;
+import com.example.jhschedular.dto.request.user.RequestToEditUserDto;
+import com.example.jhschedular.dto.request.user.RequestToRegisterUserDto;
 import com.example.jhschedular.entity.User;
 
 public class userMapper {

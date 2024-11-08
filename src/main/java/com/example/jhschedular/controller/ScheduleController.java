@@ -1,21 +1,17 @@
 package com.example.jhschedular.controller;
 
 
-import com.example.jhschedular.dto.request.RequestToDeleteUserDto;
-import com.example.jhschedular.dto.request.RequestToEditScheduleDto;
-import com.example.jhschedular.dto.request.RequestToEditUserDto;
-import com.example.jhschedular.dto.request.RequestToPostScheduleDto;
-import com.example.jhschedular.dto.request.RequestToRegisterUserDto;
-import com.example.jhschedular.dto.request.RequestToSearchScheduleByDateDto;
-import com.example.jhschedular.dto.request.RequestToViewScheduleDto;
-import com.example.jhschedular.dto.response.ResponseToDeleteScheduleDto;
-import com.example.jhschedular.dto.response.ResponseToEditDto;
-import com.example.jhschedular.dto.response.ResponseToEditUserDto;
-import com.example.jhschedular.dto.response.ResponseToPostScheduleDto;
-import com.example.jhschedular.dto.response.ResponseToRegisterUserDto;
-import com.example.jhschedular.dto.response.ResponseToSearchScheduleListDto;
-import com.example.jhschedular.dto.response.ResponseToViewScheduleDto;
-import com.example.jhschedular.service.ScheduleService;
+import com.example.jhschedular.dto.request.schedule.RequestToEditScheduleDto;
+import com.example.jhschedular.dto.request.schedule.RequestToPostScheduleDto;
+import com.example.jhschedular.dto.request.schedule.RequestToSearchScheduleByDateDto;
+import com.example.jhschedular.dto.request.schedule.RequestToViewScheduleDto;
+import com.example.jhschedular.dto.request.user.RequestToDeleteUserDto;
+import com.example.jhschedular.dto.response.schedule.ResponseToDeleteScheduleDto;
+import com.example.jhschedular.dto.response.schedule.ResponseToEditScheduleDto;
+import com.example.jhschedular.dto.response.schedule.ResponseToPostScheduleDto;
+import com.example.jhschedular.dto.response.schedule.ResponseToSearchScheduleListDto;
+import com.example.jhschedular.dto.response.schedule.ResponseToViewScheduleDto;
+import com.example.jhschedular.service.ScheduleServiceimpl;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -36,8 +32,8 @@ import java.util.Optional;
 
 @RestController
 public class ScheduleController {
-    private final ScheduleService scheduleService;
-    public ScheduleController(ScheduleService scheduleService) {
+    private final ScheduleServiceimpl scheduleService;
+    public ScheduleController(ScheduleServiceimpl scheduleService) {
         this.scheduleService = scheduleService;
 
     }
@@ -52,8 +48,8 @@ public class ScheduleController {
 
     @ResponseBody
     @PutMapping(value = "/schedules/{scheduleId}")
-    public HttpEntity<ResponseToEditDto> controllerToEditSchedule(@RequestBody RequestToEditScheduleDto body, @PathVariable("scheduleId") Long scheduleId) throws IOException {
-        ResponseToEditDto response = scheduleService.editToDatabase(body,scheduleId);
+    public HttpEntity<ResponseToEditScheduleDto> controllerToEditSchedule(@RequestBody RequestToEditScheduleDto body, @PathVariable("scheduleId") Long scheduleId) throws IOException {
+        ResponseToEditScheduleDto response = scheduleService.editToDatabase(body,scheduleId);
 
         return new ResponseEntity<>(response, HttpStatus.OK);
 
@@ -89,18 +85,5 @@ public class ScheduleController {
 
     }
 
-    @ResponseBody
-    @PostMapping(value = "/schedules/register")
-    public HttpEntity<ResponseToRegisterUserDto> controllerToRegister(@RequestBody RequestToRegisterUserDto body) throws IOException {
-        ResponseToRegisterUserDto response = scheduleService.registerToDatabase(body);
-        return new ResponseEntity<>(response, HttpStatus.OK);
 
-    }
-    @ResponseBody
-    @PutMapping(value = "/schedules/user-profile/{userId}")
-    public HttpEntity<ResponseToEditUserDto> controllerToEditUser(@PathVariable("userId") Long userId, @RequestBody RequestToEditUserDto body) throws IOException {
-        ResponseToEditUserDto response = scheduleService.editUserToDatabase(body,userId);
-        return new ResponseEntity<>(response, HttpStatus.OK);
-
-    }
 }

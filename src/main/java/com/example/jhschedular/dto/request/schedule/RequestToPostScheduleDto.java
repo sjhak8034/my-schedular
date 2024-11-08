@@ -1,4 +1,4 @@
-package com.example.jhschedular.dto.request;
+package com.example.jhschedular.dto.request.schedule;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
