@@ -1,21 +1,34 @@
 use schedulardb;
 
-CREATE TABLE `Schedules` (
-                             schedule_id	int	AUTO_INCREMENT PRIMARY KEY,
-                             posted_date	datetime	NOT NULL	,
-                             title	varchar(20)	NOT NULL	,
-                             content	varchar(100)	NOT NULL	D,
-                             password	varchar(20)	NOT NULL	,
-                             user_name	varchar(20)	NOT NULL
+create table schedules
+(
+    schedule_id bigint auto_increment comment '게시글 식별자'
+        primary key,
+    post_date   datetime     not null comment '작성 날짜',
+    edit_date   datetime     not null comment '수정 날짜',
+    title       varchar(20)  not null comment '제목',
+    content     varchar(200) not null comment '내용',
+    password    varchar(20)  not null comment '비밀번호',
+    user_name   varchar(20)  not null comment '작성자 이름',
+    user_id     bigint       null,
+    constraint schedules_ibfk_1
+        foreign key (user_id) references user (user_id)
+);
+
+create index user_id
+    on schedules (user_id);
+
+create table user
+(
+    user_id       bigint auto_increment comment '유저 식별자'
+        primary key,
+    user_name     varchar(20) not null comment '유저 이름',
+    register_date datetime    not null comment '등록일',
+    edit_date     datetime    not null comment '유저 수정일',
+    email         varchar(20) not null comment '이메일',
+    constraint email
+        unique (email)
 );
 
 
 
-
-INSERT INTO schedulardb.schedules (posted_date, title , content, password, user_name ) VALUES ('2024-01-01-00-00-00','work','meeting','asdf1234','홍길동');
-update schedulardb.schedules set posted_date ='2024-01-03', title = 'travel', content = 'go to restaurant'  where schedule_id = 1;
-DELETE FROM schedulardb.schedules WHERE schedule_id = 1;
-
-
-select title, content from schedulardb.schedules where schedule_id = 1;
-select schedule_id from schedulardb.schedules where posted_date BETWEEN '2024-01-01 00:00:00' AND '2024-11-30 23:59:59' limit 10;
