@@ -39,7 +39,7 @@ public class JdbcTemplateScheduleRepository implements ScheduleRepository {
         params.addValue("user_id", entity.getUserId());
         try {
             Number scheduleId = simpleJdbcInsert.executeAndReturnKey(params);
-            return Schedule.forScheduleId( Optional.of(scheduleId).map(Number::longValue).get());
+            return new Schedule.Builder().scheduleId( Optional.of(scheduleId).map(Number::longValue).get()).build();
         }catch (DataIntegrityViolationException e){
             System.out.println(e.getMessage());
             return null;
@@ -59,23 +59,33 @@ public class JdbcTemplateScheduleRepository implements ScheduleRepository {
         if (result == 0){
             return null;
         }
-        return Schedule.forScheduleId(entity.getScheduleId());
+        return new Schedule.Builder().scheduleId(entity.getScheduleId()).build();
     }
 
     /**
      * ResponseToSearchScheduleListDto 와 database 검색 결과를 연결하기 위한 메소드
      * @return RowMapper<ResponseToSearchScheduleListDto>
      */
-    @Override
+
     public RowMapper<Schedule> scheduleRowMapperForSearch(){
-        return (rs, rowNum) -> Schedule.searchResult(
-                rs.getLong("schedule_id"),
-                rs.getString("title"),
-                rs.getString("content"),
-                rs.getString("user_name"),
-                rs.getString("post_date"),
-                rs.getString("edit_date")
-        );
+        return (rs, rowNum) -> new Schedule.Builder().scheduleId(
+                rs.getLong("schedule_id")).title(
+                rs.getString("title")).content(
+                rs.getString("user_name")).postDate(
+                rs.getString("post_date")).editDate(
+                rs.getString("edit_date")).build();
+
+    }
+
+    public RowMapper<Schedule> scheduleRowMapperForView(){
+        return (rs, rowNum) -> new Schedule.Builder().scheduleId(
+                rs.getLong("schedule_id")).title(
+                rs.getString("title")).content(
+                rs.getString("content")).userName(
+                rs.getString("user_name")).postDate(
+                rs.getString("post_date")).editDate(
+                rs.getString("edit_date")).build();
+
     }
 
     /**
@@ -90,7 +100,7 @@ public class JdbcTemplateScheduleRepository implements ScheduleRepository {
     @Override
     public List<Schedule> searchScheduleByDate(Schedule entity, String startDate, String endDate, Long pageSize, Long offset) {
 
-        return jdbcTemplate.query("select * from schedules where user_id = ? and edit_date between ? and ? " +
+        return jdbcTemplate.query("select schedule_id, title, user_name,post_date,edit_date from schedules where user_id = ? and edit_date between ? and ? " +
                 "order by schedule_id desc limit ? offset ?",new Object[]{
                 entity.getUserId(), startDate, endDate,pageSize,
                 offset
@@ -106,7 +116,7 @@ public class JdbcTemplateScheduleRepository implements ScheduleRepository {
      */
     @Override
     public Optional<Schedule> viewSchedule(Schedule entity){
-        List<Schedule> result = jdbcTemplate.query("select * from schedules where schedule_id = ?", scheduleRowMapperForSearch(), entity.getScheduleId());
+        List<Schedule> result = jdbcTemplate.query("select schedule_id, title, content, user_name,post_date,edit_date from schedules where schedule_id = ?", scheduleRowMapperForView(), entity.getScheduleId());
 
         return result.stream().findAny();
     }
@@ -122,7 +132,7 @@ public class JdbcTemplateScheduleRepository implements ScheduleRepository {
         if (result == 0){
             return null;
         }
-        return Schedule.forScheduleId(entity.getScheduleId());
+        return new Schedule.Builder().scheduleId(entity.getScheduleId()).build();
     }
 
 

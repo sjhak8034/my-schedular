@@ -46,6 +46,7 @@ public class ScheduleServiceImpl implements ScheduleService {
         if (entity == null) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,"작성 실패");
         }
+
         return ScheduleResponseMapper.toPostDto(entity);
     }
 

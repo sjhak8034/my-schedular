@@ -1,7 +1,5 @@
 package com.example.jhschedular.repository;
 
-import com.example.jhschedular.dto.response.user.ResponseToEditUserDto;
-import com.example.jhschedular.dto.response.user.ResponseToRegisterUserDto;
 import com.example.jhschedular.entity.User;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -39,7 +37,7 @@ public class JdbcTemplateUserRepository implements UserRepository {
 
         try {
             Number userId = simpleJdbcInsert.executeAndReturnKey(params);
-            return User.forUserId(Optional.of(userId).map(Number::longValue).get());
+            return new User.Builder().userId(Optional.of(userId).map(Number::longValue).get()).build();
         } catch (DataIntegrityViolationException e) {
             System.out.println(e.getMessage());
             return null;
@@ -59,6 +57,6 @@ public class JdbcTemplateUserRepository implements UserRepository {
         if (result == 0) {
             return null;
         }
-        return User.forUserId(entity.getUserId());
+        return new User.Builder().userId(entity.getUserId()).build();
     }
 }

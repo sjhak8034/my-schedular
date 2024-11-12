@@ -7,57 +7,52 @@ import java.time.format.DateTimeFormatter;
 
 @Getter
 public class User {
-   // 사용하지 않는 변수를 채우기위한 값
-    private static final String EMPTY_STRING = "";
-    private static final Long EMPTY_USERID = 0L;
-
     private final Long userId;
     private final String userName;
     private final String email;
     private final String registerDate;
     private final String editDate;
-    private User(Long userId, String userName, String email, String registerDate, String editDate) {
-        this.userId = userId;
-        this.userName = userName;
-        this.email = email;
-        this.registerDate = registerDate;
-        this.editDate = editDate;
+    private User(Builder builder) {
+        this.userId = builder.userId;
+        this.userName = builder.userName;
+        this.email = builder.email;
+        this.registerDate = builder.registerDate;
+        this.editDate = builder.editDate;
     }
-    // 정적 팩토리 메소드 구현
-
-    /**
-     * 현재 날짜와 시간을 얻기위한 메소드
-     * @return 날짜 시간
-     */
-    private static String getCurrentFormattedDate() {
-        LocalDateTime now = LocalDateTime.now();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-        return now.format(formatter);
-    }
-
-    /**
-     * 유저등록 엔티티
-     * @param userName
-     * @param email
-     * @return
-     */
-    public static User register(String userName, String email) {
-        String registerDate = getCurrentFormattedDate();
-        return new User(EMPTY_USERID,userName, email,registerDate,registerDate);
-    }
-
-    /**
-     * 유저 정보 수정 엔티티
-     * @param userId
-     * @param userName
-     * @param email
-     * @return
-     */
-    public static User edit(Long userId, String userName, String email) {
-        String editDate = getCurrentFormattedDate();
-        return new User(userId,userName, email,EMPTY_STRING,editDate);
-    }
-    public static User forUserId(Long userId) {;
-        return new User(userId,EMPTY_STRING,EMPTY_STRING,EMPTY_STRING,EMPTY_STRING);
+    public static class Builder {
+        private Long userId;
+        private String userName;
+        private String email;
+        private String registerDate;
+        private String editDate;
+        public Builder (){
+            LocalDateTime now = LocalDateTime.now();
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+            this.registerDate = now.format(formatter);
+            this.editDate = now.format(formatter);
+        }
+        public Builder userId(Long userId) {
+            this.userId = userId;
+            return this;
+        }
+        public Builder userName(String userName) {
+            this.userName = userName;
+            return this;
+        }
+        public Builder email(String email) {
+            this.email = email;
+            return this;
+        }
+        public Builder registerDate(String registerDate) {
+            this.registerDate = registerDate;
+            return this;
+        }
+        public Builder editDate(String editDate) {
+            this.editDate = editDate;
+            return this;
+        }
+        public User build() {
+            return new User(this);
+        }
     }
 }
